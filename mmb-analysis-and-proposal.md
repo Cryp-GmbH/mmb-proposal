@@ -249,7 +249,7 @@ The additional success milestones are described in the [success reward section](
 ### Research Timeframe 
 ---
 #### M1. Paper: **18 weeks (162'000 CHF)**
-The primary milestone of the research track is completing a paper on MMBs currently in the works. The timeframe for completion of this paper is so short since a lot of the work for the paper has already been completed by the team members in collaboration with Alistair Stewart at Web 3.0 Foundation. Alistair Stewart will also be a co-author on the paper.
+The primary milestone of the research track is completing a paper on MMBs currently in the works. The timeframe for completion of this paper is so short since a lot of the work for the paper has already been completed by the team members in collaboration with Alistair Stewart, for which we already received funding from Web 3 Foundation, and we are not asking for any of this prior work to be funded again. Alistair Stewart will also be a co-author on the paper.
 
 This paper will present the novel data structures U-MMBs, F-MMBs, and MMBs. The paper will also compare the MMB flavors with existing data structures like hash chains and two variants of MMRs.
 ##### Writing budget: 12 weeks
