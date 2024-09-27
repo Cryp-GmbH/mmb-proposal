@@ -347,7 +347,7 @@ We remark that this goal demands considerable resources, including possibly subm
 #### SC2. Engineering Success: Polkadot deployment
 Once the library is fully developed and ready for use in BEEFY, it will still have to be deployed. This intense process will not only require our continuous involvement, but also close collaboration with the Technical Fellowship, and for some steps also the Snowfork and/or the Hyperbridge team.
 
-Likewise, the code will have to be audited before deployment on Polkadot. This would either be covered by a separate proposal or via e.g. an SRLabs retainer.
+Likewise, the code will have to be audited before deployment on Polkadot. This would either be covered by a separate proposal[^audit-cost] or via e.g. an SRLabs retainer.
 
 Since these upcoming steps involve multiple moving parts, it is hard to provide a reliable time estimate for completing these.
 
@@ -416,5 +416,7 @@ When Hyperbridge's Ethereum client receives inbound cross-chain messages (`handl
 [^randao]: After a new MMR/MMB root is relayed via [`submitInitial`](https://github.com/Snowfork/snowbridge/blob/main/contracts/src/BeefyClient.sol#L250-L301) on Snowbridge, there is a mandatory delay of at least 3 epochs, i.e. 19 minutes, before the BEEFY light client's storage is updated with the new root via [`submitFinal`](https://github.com/Snowfork/snowbridge/blob/main/contracts/src/BeefyClient.sol#L343-L391) due to [RanDAO biasability](https://eth2book.info/altair/part3/config/preset/#max_seed_lookahead). Hence, the overall latency of a message sent 15 minutes prior to the root update being initiated is over 30 minutes. 
 
 [^glassnode-maximum-range]: This is the maximum averaging range on Glassnode.
+
+[^audit-cost]: Based on our current MMB implementation in Clojure, we have received a quote from Oak Security of 74'800 USD for auditing the Rust library. We reckon Oak Security is in an ideal position to audit the MMB implementation since they have already audited [various iterations of Snowbridge](https://github.com/oak-security/audit-reports/tree/main/Snowbridge) and are therefore very familiar with the usage context.
 
 [^success-reward-calculation-method]: At a high-level, we can calculate the gas-cost saving as follows: `gasSaving = gasCostPerProofItem * (proofItemsMMR(leafPosition, accumulatorSize) - proofItemsMMB)`, where `proofItemsMMR(leafPosition, accumulatorSize)` can be calculated as in [here](https://github.com/nervosnetwork/merkle-mountain-range/compare/master...Lederstrumpf:merkle-mountain-range:mmr_profile_proof_size), the `accumulatorSize` can be retrieved from [`BeefyClient.latestBeefyBlock`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L156-L157), the leafPosition can be determined from [`MMRLeaf.parentNumber`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L111-L112), and `proofItemsMMB` will just be the length of the MMB [`leafProof`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L348) once MMBs are deployed.
