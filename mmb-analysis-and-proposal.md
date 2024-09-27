@@ -1,4 +1,4 @@
-# Merkle Mountain Belts: Cost saving analysis + funding proposal 
+# Merkle Mountain Belts: Cost saving analysis + funding proposal V2
 ![Groupe Logo noir@4x](https://hackmd.io/_uploads/Hkdh8Idw0.png =10%x)
 #### Cryp GmbH
 ##### Alfonso Cevallos, Robert Hambrock
@@ -30,11 +30,11 @@
 
 ## Intro 
 
-Imagine this: by the beginning of 2026, decentralized applications have gained a significant foothold in the world finances. With them, blockchain platforms such as Polkadot and Ethereum move millions of dollars worth of value every day, and a successful DOT-ETH bridge is one of the top five cross-chain bridges in use. To realize this future for Polkadot, the time is NOW to build the most efficient and secure cross-chain bridge out there. Yet this will not happen if the related bridging costs are as high as they are now.
+Imagine this: by the beginning of 2026, decentralized applications have gained a significant foothold in the world finances. With them, blockchain platforms such as Polkadot and Ethereum move millions of dollars worth of value every day, and a successful DOT-ETH bridge is one of the top five cross-chain bridges in use. To realize this future for Polkadot, the time is NOW to build the most efficient and secure bridge out there. Yet this might not happen if the related bridging costs remain as high as they are now.
 
-We propose developing a brand new data structure called Merkle Mountain Belt (MMB), namely both its theoretical and implementation sides, that would replace the use of MMRs in the BEEFY protocol used by bridges like Snowbridge and Hyperbridge. This change will considerably reduce the size of cross-chain message proofs in the bridge[^hyperbridge-operational-cost], in turn reducing the transaction costs of users, with estimated savings of one to two million dollars [per year](#Traffic-Estimate), at current prices.
+We propose developing a brand new data structure called Merkle Mountain Belt (MMB), namely both its theoretical and implementation sides, that would replace the use of the Merkle Mountain Range (MMR) in the BEEFY protocol used by bridges like Snowbridge and Hyperbridge. This change will considerably reduce the size of cross-chain message proofs in the bridge[^hyperbridge-operational-cost], in turn reducing the transaction costs for users, with estimated savings of one to two million dollars [per year](#Traffic-Estimate), at current prices.
 
-We also propose writing a research paper about the new data structure, and publishing it in a top rated computer science conference. Polkadot has always been a thought leader in blockchain technology, being one of the few communities that pioneers top quality research, and not just bells and whistles. This proposal honors this tradition. MMRs are currently widely used across multiple blockchains, and improving upon them with MMBs would heighten Polkadot's impact on and reputation within the wider ecosystem.
+We also propose writing a research paper in collaboration with Alistair Stewart, Head of Research at Web3 Foundation, about the new data structure, and publishing it in a top rated computer science conference. Polkadot has always been a thought leader in blockchain technology, being one of the few communities that pioneers top quality research, and not just bells and whistles. This proposal honors this tradition. MMRs are currently widely used across multiple blockchains, and improving upon them with MMBs would heighten Polkadot's impact on and reputation within the wider ecosystem.
 
 The members of our [team](#Team) are highly qualified and have worked in Polkadot since pre-mainnet days. Our principal researcher Alfonso has a Ph.D. in mathematics and is a co-author of many Polkadot papers, including the [2020 overview paper](https://arxiv.org/abs/2005.13456). Our principal developer Robert has been one of the earliest stewards of the Polkadot-Ethereum bridge, going back to its initial W3F grant, design of protocols, and implementation.
 
@@ -42,8 +42,7 @@ The members of our [team](#Team) are highly qualified and have worked in Polkado
 
 :::info
 **TLDR of MMBs & cost analysis:**
-Merkle Mountain Belts (MMBs) are a data structure that can serve as a plug-in replacement for Merkle Mountain Ranges (MMRs), to produce BEEFY commitments, which are currently used by the DOT-ETH bridges.
-Over the next 5 years, MMBs would save [over 40% of proof size](https://docs.google.com/spreadsheets/d/1CIANkTytd6qVo_oc_r2EYzdschoACzgyIa5OiMmPy0I/edit?gid=174519946#gid=174519946) against the current MMR implementation. From our gas and cost estimates, this corresponds to $1.25 per transaction.
+The MMB data structure serves as a plug-in replacement for MMR, to produce BEEFY commitments, which are used by the DOT-ETH bridges. Over the next 5 years, MMB would save [over 40% of proof size](https://docs.google.com/spreadsheets/d/1CIANkTytd6qVo_oc_r2EYzdschoACzgyIa5OiMmPy0I/edit?gid=174519946#gid=174519946) against the current MMR implementation. From our gas and cost estimates, this corresponds to $1.25 of savings per transaction.
 <!---If Polkadot's BEEFY bridges have comparable volume--->
 :::
 
@@ -52,45 +51,47 @@ Over the next 5 years, MMBs would save [over 40% of proof size](https://docs.goo
 
 Balanced Merkle trees, hash chains, and Merkle Mountain Ranges (MMRs) are three examples of data structures widely used in blockchain as *commitment schemes*: they allow full nodes to produce a compact *commitment* to some database $X$, and then produce a small *membership proof* (a.k.a. Merkle proof) to show to a *verifier* that an item $x\in X$ is part of the committed database. 
 
-These commitment schemes are used everywhere in blockchain and allow for external entities to query specific data efficiently, without having to follow consensus, download the full blockchain state, nor trust any one full node. The data structures mentioned above have different properties, and one or other will be chosen depending on the specific use case. The right choice of data structure can drastically reduce the running costs of the corresponding verifier. 
+These data structures are used everywhere in blockchain and allow for any entity to query and authenticate specific data efficiently, without having to follow consensus, download the full state, nor trust any one full node. The aforementioned structures have different properties, and one or other will be chosen depending on the specific use case. The right choice of structure can drastically reduce the corresponding data authentication costs. 
 
-The Merkle Mountain Belt is a new commitment scheme in the same family of Merkle structures, optimized specifically for the use case of BEEFY, the protocol designed for efficient DOT-ETH bridging. Via BEEFY, a smart contract on Ethereum periodically receives a digest on the current state of Polkadot, where the refresh rate is in the order of minutes to a couple hours, and verifiers are Ethereum users who typically query events as soon as a digest committing to them is made available.
+The Merkle Mountain Belt (MMB) is a new member of this family of Merkle structures, optimized specifically for the use case of BEEFY, the protocol designed for efficient DOT-ETH bridging: Via BEEFY, a smart contract on Ethereum periodically receives a digest of the current state of Polkadot, with a refresh rate in the order of minutes to a couple hours, and bridge users authenticate Polkadot events on Ethereum with the help of this digest. 
 
-To oversimplify, we can say that if most queries from verifiers are strictly for data from the latest block, then the most efficient commitment scheme would be a hash chain, while if queries tend to be for very old data, the most efficient scheme would be an MMR. The MMB is a "best of both worlds" structure whose performance is always comparable to the better of the two schemes, for any possible sampling distribution, but crucially, it outperforms them both in the case that queries are concentrated on events that took place in the time range from the last minute to the last day.[^comparison]
+To oversimplify, we can say that if bridge users mostly care about Polkadot events from the last block, then the most efficient commitment scheme would be a hash chain, while if they care about very old data, the most efficient scheme would be an MMR. The MMB is a "best of both worlds" structure whose performance is always comparable to the better of the two former schemes, for any possible distribution of queries. But crucially, it outperforms them both in the case that users' queries are concentrated on events that took place in the time range from the last minute to the last day.[^comparison] 
+
+Let's get into details.
 
 ### Technical features
 
 Consider an item list $X=(x_1, x_2, \cdots, x_n)$ onto which new items are constantly being appended. This could be one of many databases, such as XCMP messages, but in our primary use case items correspond to Polkadot relay chain blocks[^mmr-leaf-content]. MMB is a data structure built on top of $X$ that produces a compact commitment to it. Its features are: 
 
-* faster updates after each append (specifically: constant time append operations), and
+* faster (constant time) updates after each append, and 
 * shorter membership proofs for recently appended items.
 
 
 |  | Chain | MMR | MMB |
 | -------- | -------- | -------- | --- |
 | Update time per append | $O(1)$ | $O(\log n)$ | $O(1)$ | 
-| Proof size of $k$-th newest item | $O(k)$ | $O(\log n)$ | $O(\log k)$ |
+| Proof size of the $k$-th newest item | $O(k)$ | $O(\log n)$ | $O(\log k)$ |
 
-In this table, we assume $1\leq k\leq n$, where $n:=|X|$ is the current number of items in list $X$, and $k$ is the recency of the item for which we need a membership proof. In our use case $k$ is typically low, say between $10$ and $500$, because we mostly care about proving stuff about recent events. Also keep in mind that Polkadot  currently has north of $20$ million blocks produced, so we are dealing with a use case where $n$ quickly reaches the order of tens of millions.
+In this table, we assume $1\leq k\leq n$, where $n:=|X|$ is the current number of items in list $X$, and $k$ is the recency of the item for which we need a membership proof. In our use case $k$ is typically low, say between $10$ and $500$, because users mostly care about recent events. Also keep in mind that Polkadot  currently has north of $20$ million blocks produced, so we are dealing with a use case where $n$ quickly reaches the order of tens of millions.
 <!---For the sake of comparison, in the following analysis we take $n=2^{24}$ as a canonical value.--->
 For the sake of comparison, in the following analysis, we average $n$ over the first 5 years after anticipated MMB deployment within BEEFY on Polkadot, that is $10512000\leq n \leq 36792000$[^n-sampling-range].
 
 ### Faster update times
 
-The main advantage of a hash chain is that it takes a single hash computation to append a new item. On the other hand, MMR and any other structure that attempts to stay balanced will pay an update cost of $O(\log n)$ per append, as the new leaf is immediately buried deep. In our use case, MMR requires on average about $\frac{1}{2}\log_2 n \approx 12$ hash computations (and growing) per append. 
+The main advantage of a hash chain is that it takes a single hash computation to append a new item. On the other hand, MMR, and any other structure that attempts to maintain a balanced tree, will pay an update cost of $O(\log n)$ per append, as the new leaf is immediately buried deep in the tree. In our use case, MMR requires on average about $\frac{1}{2}\log_2 n \approx 12$ hash computations (and growing) per append. 
 
-Surprisingly, MMB achieves a **constant** cost per append: between 3 and 5 hash computations regardless of the value of $n$. To do so, it maintains a slightly unbalanced structure, where recent leaves are more shallow, though not completely unbalanced as with a hash chain.
-
-In our use case, having a faster append time is important for block authors, who have to perfom the update on-chain and on the fly as they generate blocks. In other use cases that, e.g., employ ZK proofs, having constant-complexity operations is a hard constraint, so they might not be able to use MMRs with acceptable cost, but they can use MMBs.
+Surprisingly, MMB achieves a **constant** cost per append: between 3 and 5 hash computations regardless of the list size $n$. To do so, it maintains a slightly unbalanced structure, where recent leaves are more shallow, though not completely unbalanced as with a hash chain. In our use case, having a faster append time is important for block authors, who have to perfom the update on-chain and on the fly as they generate blocks. 
 
 ### Shorter membership proofs
 
-However, the killer feature of MMB for our use case is its slight unbalancedness, which makes recently appended items have shorter membership proofs. This leads to lower operational costs because bridge users are much more likely to care about recent events[^relayer-frequency]. 
+However, the killer feature of MMB for our use case is its slight unbalancedness, which makes recently appended items have shorter membership proofs. This leads to lower operational costs because bridge users are more likely to care about recent events[^relayer-frequency]. 
 
-In particular, Ethereum users will use the latest BEEFY commitment stored on the bridge to authenticate a cross-chain message that originated from Polkadot, such as a deposit. They will typically act as soon as there is a such a commitment to their event of interest. Hence, in order to ensure user friendliness, we need two things:
+In particular a message, such as a transfer request, will first be created on Polkadot, and then sent to Ethereum, and authenticated there with the help of the BEEFY commitment stored on the bridge. Users typically want to execute this second step as soon as possible, i.e., the next time the BEEFY commitment is updated on the bridge. 
+
+Hence, in order to ensure user friendliness, we need two things:
 
 1. Short intervals between commitment updates in the bridge. Popular cross-chain bridges update their commitment every 15 minutes to 30 minutes. This could be reduced to five minutes, or increased to a couple of hours, depending on the chosen trade-off between operational cost and user friendliness. 
-2. A structure, like MMB, that minimizes the membership proof size of leaves added in the last five minutes, to the last couple of hours.
+2. A structure, like MMB, that minimizes the membership proof size of items added in the last five minutes, to the last couple of hours.
 
 <a id="proof-size-comparison"></a>
 
@@ -105,7 +106,7 @@ In particular, Ethereum users will use the latest BEEFY commitment stored on the
 | 4 hours ($k\leq2400$) | $1200$ | $18.66$ | $15.41$ |
 | 24 hours ($k\leq14400$) | $7200$ | $19.95$ | $18.97$ |
 
-*Average proof size (in hashes) of an item appended at different recency values (i.e., time from the present), assuming that a new item is appended every 6 seconds. The results are averaged across ($10512000\leq n \leq 36792000$), i.e., the size of the list between 2-7 years of appending.*
+*Average proof size (in hashes) of an item appended at different recency values (time from the present), assuming that a new item is appended every 6 seconds (like Polkadot relay chain blocks in BEEFY). The results are averaged across ($10512000\leq n \leq 36792000$), i.e., the size of the list between 2-7 years of appending.*
 
 <!---
 | Recency | Chain | MMR | MMB |
@@ -119,19 +120,17 @@ In particular, Ethereum users will use the latest BEEFY commitment stored on the
 | 24 hours ($k\leq7200$) | $7200$ | $19.3$ | $19.7$ |
 --->
 
-
+We see that MMB produces shorter proofs in expectation than both MMR and a hash chain, for any commitment refresh rate between once per minute and once per day. 
 
 <a id="MMBs-in-BEEFY"></a>
 
 ## Cost savings analysis against MMRs
 
-In an Ethereum bridge, the BEEFY light client on Ethereum stores a commitment to Polkadot's state. Currently, this commitment is an MMR root. Concretely, the MMR root commits to the leaves of the MMR, and in turn the leaves of the MMR contain commitments to parachain headers. As such, from the MMR root, one can prove to Ethereum that some event occurred on Polkadot.
-
-When a message (that, e.g., encodes a transaction) goes over the bridge, the message producer or a relayer proves to the BEEFY light client that this message is authentic by attaching an MMR proof and a header proof to the message:
-1. The MMR proof shows that the MMR (whose root is held in the BEEFY light client) commits to a leaf, which in turns commits to a particular parachain header.
+In an Ethereum bridge, a smart contract on Ethereum stores a commitment to Polkadot's state. Currently, this commitment is built with an MMR, where a new leaf is added for each Polkadot relay chain block, and in turn each leaf contains commitments to parachain headers. When a message (that, e.g., encodes a transaction) goes over the bridge, either a user or a relayer has to authenticate it in the smart contract, by attaching an MMR proof and a header proof to the message:
+1. The MMR proof shows that the MMR (whose root is held in smart contract) commits to a leaf, which in turns commits to a particular parachain header.
 2. The header proof shows that this parachain header indeed contains the claimed content, such as a message.
 
-As the MMR grows over time, so grow in size the membership proofs that have to be relayed to the BEEFY light client. In contrast to MMRs, in MMBs the membership proof size is *independent* of the size of the MMB - its asymptotic behavior is instead governed by the recency of the leaf to be proven. Hence if membership proofs are primarily for recent items, then MMBs on average have much smaller membership proofs than MMRs.
+As the number of Polkadot blocks grows, so grow the MMR and the membership proofs that have to be relayed to Ethereum. In contrast, in MMBs the size of a membership proof is *independent* of the size of the structure -- its asymptotic behavior is instead governed by the recency of the corresponding leaf. As bridge users primarily care about recent events, MMB will offer much smaller membership proofs than MMRs on average.
 
 <a id="Cost-Estimate"></a>
 
@@ -139,28 +138,28 @@ As the MMR grows over time, so grow in size the membership proofs that have to b
 
 We calculate the expected transaction cost saving from switching from MMRs to MMBs in the first 5 years after we conservatively expect the MMB upgrade to go live, namely Q1 2026. Since this is approximately 2 years after BEEFY got activated on Polkadot (February 2024), we'll average the MMR size over ($10512000\leq n \leq 36792000$), as done before in the [table above](#proof-size-comparison).
 
-To compare both schemes, we consider the membership proof of leaves up until the 150th most recent leaf. This value $k\leq150$ corresponds to querying a message that was included in the Polkadot state up to 15 minutes ago (+ 24 minutes; see note on RanDAO[^randao]). For $k\leq150$, the average MMR proof size (measured in hashes) is 16.65, against 9.95 for MMB proofs, hence MMBs save 6.7 proof items: a proof size reduction of over 40%.
+To compare both schemes, we consider the membership proof of leaves up until the 150th most recent leaf. This value $k\leq150$ corresponds to querying a message that was created on Polkadot up to 15 minutes ago (+ 24 minutes; see note on RanDAO[^randao]). For $k\leq150$, the average MMR proof size, measured in hashes, is 16.65, against 9.95 for MMB proofs, hence MMB saves 6.7 hashes: a proof size reduction of over 40%.
 
-Via gas profiling from Snowfork's implementation, every additional proof item in the membership proof of an MMR leaf adds approximately 2'568.34 gas of computation cost on Ethereum: [`Lederstrumpf/snowbridge/rhmb/profile-proof-item-gas-cost`](https://github.com/Snowfork/snowbridge/compare/main...Lederstrumpf:snowbridge:rhmb/profile-proof-item-gas-cost?expand=1#diff-ad43af2a8fe32a0a552c025fc1d86308adf4ee1e4d45f83070cce458c461c818R85-R87)
+Via gas profiling from Snowfork's implementation, every additional hash in the membership proof of an MMR leaf adds approximately 2'568 gas of computation cost on Ethereum: [`Lederstrumpf/snowbridge/rhmb/profile-proof-item-gas-cost`](https://github.com/Snowfork/snowbridge/compare/main...Lederstrumpf:snowbridge:rhmb/profile-proof-item-gas-cost?expand=1#diff-ad43af2a8fe32a0a552c025fc1d86308adf4ee1e4d45f83070cce458c461c818R85-R87)
 
-Assuming a gas price of 26.99 GWEI (365 day SMA via [Glassnode](https://studio.glassnode.com/metrics?a=ETH&category=&chartStyle=column&ema=0&from_exchange=aggregated&m=fees.GasPriceMean&mAvg=365&mMedian=0&resolution=24h&s=1687097402&to_exchange=aggregated&u=1718633402&utm_campaign=woc_02_2023&utm_medium=insights_woc&utm_source=gn_insights&zoom=365)), and an ETH price of $2'452.41/ETH (365 day SMA via [Glassnode](https://studio.glassnode.com/metrics?a=ETH&category=Market&chartStyle=column&ema=0&from_exchange=aggregated&m=market.PriceUsdClose&mAvg=365&mMedian=0&resolution=24h&s=1687097402&to_exchange=aggregated&u=1718633402&utm_campaign=woc_02_2023&utm_medium=insights_woc&utm_source=gn_insights&zoom=365)), the cost per proof item is 17.5 cents.
+Assuming a gas price of 26.99 GWEI (365 day SMA via [Glassnode](https://studio.glassnode.com/metrics?a=ETH&category=&chartStyle=column&ema=0&from_exchange=aggregated&m=fees.GasPriceMean&mAvg=365&mMedian=0&resolution=24h&s=1687097402&to_exchange=aggregated&u=1718633402&utm_campaign=woc_02_2023&utm_medium=insights_woc&utm_source=gn_insights&zoom=365)), and an ETH price of $2'452/ETH (365 day SMA via [Glassnode](https://studio.glassnode.com/metrics?a=ETH&category=Market&chartStyle=column&ema=0&from_exchange=aggregated&m=market.PriceUsdClose&mAvg=365&mMedian=0&resolution=24h&s=1687097402&to_exchange=aggregated&u=1718633402&utm_campaign=woc_02_2023&utm_medium=insights_woc&utm_source=gn_insights&zoom=365)), the cost per hash is 17.5 cents.
 
-Consequently, since an average proof of a leaf in an MMR of depth up to $k\leq150$ is 16.65, expected proof verification cost for such a leaf is $2.91. In contradistinction, with MMBs the expected proof size is 9.95, hence the cost goes down to $1.74. Using an MMB rather than an MMR for the BEEFY commitment thus would effect a saving of 6.7 proof items, or $1.17 per message sent to Ethereum.
+Consequently, since an average proof size of a leaf in an MMR of depth up to $k\leq150$ is 16.65, the expected proof verification cost for such a leaf is $2.91. In contradistinction, with MMBs the expected proof size is 9.95, hence the cost goes down to $1.74. Using an MMB rather than an MMR for the BEEFY commitment thus would effect a saving of 6.7 hashes, or $1.17 per message sent to Ethereum.
 <!---committed list of size $n=2^{24}$ (current Kusama/Polkadot block counts),--->
 
 For more calculation details and a 1000-day[^glassnode-maximum-range] SMA comparison, see the [Cost Analysis Spreadsheet](https://docs.google.com/spreadsheets/d/1CIANkTytd6qVo_oc_r2EYzdschoACzgyIa5OiMmPy0I/edit?gid=174519946#gid=174519946).
 
-***Note:** this cost is saved by users of the bridge and - if it plans to subsidize transactions - the Polkadot treasury[^treasury]. This saving makes the Polkadot🡒Ethereum bridge more competitive with other bridges, increasing its utilization, and in turn increasing the aggregate cost saving. Note that these fees would otherwise just be burned on Ethereum, hence would go to no benefit toward the Polkadot ecosystem.*
+***Note:** These costs are saved by bridge users and -- in case of a subsidy -- the Polkadot treasury[^treasury]. In either case, these fees would otherwise just be burned on Ethereum, with no benefit toward the Polkadot ecosystem. This reduction in running costs will make the Polkadot🡘Ethereum bridge more competitive with other bridges, and ensure its short-term adoption and long-term upkeep.*
 
 <a id="Traffic-Estimate"></a>
 
 ### Cost savings in overall bridge traffic
 
-To estimate the transaction numbers we can expect for a successful DOT🡘ETH bridge once it is mature, we take the mean transaction numbers of the 5 most utilized bridges (by monthly volume) as a proxy.
+To estimate the transaction numbers we can expect for a successful DOT🡘ETH bridge once it is mature, we take as a proxy the mean monthly transaction volumes of the 5 most utilized bridges.
 <!--- TODO: maybe make the following a footnote to improve flow --->
-Our estimate is thus based on the assumption that at least one Polkadot-Ethereum bridge is a success. This is the same reason we chose 15 minutes (+ 24 minutes ranDAO [^randao] for Snowbridge) as a reference latency, given that such latency is offered by competitors like Stargate and Optimism, and even lower for trusted bridging setups.
+Our estimate is thus based on the assumption that at least one DOT🡘ETH bridge bridge is a success. This is the same reason we chose 15 minutes (+ 24 minutes ranDAO [^randao] for Snowbridge) as a reference latency, given that such latency is offered by competitors like Stargate and Optimism, and even lower for trusted bridging setups.
 
-A comparison (using data from 19 June 2024) is available here: [Cost Analysis Spreadsheet](https://docs.google.com/spreadsheets/d/1CIANkTytd6qVo_oc_r2EYzdschoACzgyIa5OiMmPy0I/edit?gid=174519946#gid=174519946). From it, we expect an average of 3'054.04 transactions per day, or 1'114'724.60 transactions per year.
+A comparison, using data from 19 June 2024,  is available here: [Cost Analysis Spreadsheet](https://docs.google.com/spreadsheets/d/1CIANkTytd6qVo_oc_r2EYzdschoACzgyIa5OiMmPy0I/edit?gid=174519946#gid=174519946). From it, we expect an average of 3'054 transactions per day, or 1'115'000 transactions per year.
 
 **Result:** *The estimated cost saving from switching from MMRs to MMBs is in the range of $1'306'000/year - $1'977'000/year.*
 <!-- *At a subsidization level of ..., this represents an annual cost saving of ... to the Polkadot treasury.* -->
@@ -169,56 +168,60 @@ A comparison (using data from 19 June 2024) is available here: [Cost Analysis Sp
 
 ### Unbagged MMB (U-MMB)
 
-In what follows we assume familiarity with the MMR data structure, and we build from there. Consider a list $X=(x_1, x_2, \cdots, x_n)$ we want to commit to. As in MMR, we build multiple *mountains*, where each mountain has an associated size $s$ and is a complete binary tree holding $2^s$ leaves. Each leaf is labeled with the hash evaluation of an item in $X$, and each non-leaf is labeled with the hash evaluation of the concatenation of its children. 
+In what follows we assume familiarity with the MMR data structure, and we build from there. Consider a list $X=(x_1, x_2, \cdots, x_n)$ we want to commit to. As in MMR, we build $O(\log n)$ *mountains*, where each mountain has an associated size $s$ and is a complete binary tree holding $2^s$ leaves. Each leaf is labeled with the hash evaluation of an item in $X$, and each non-leaf is labeled with the hash evaluation of the concatenation of its children. 
 
 ![MMB9](https://hackmd.io/_uploads/rkDvrCIDA.png)
 
 
-This is the MMB structure for $n=9$ (without bagging), with three mountains of sizes $2,2,0$, whose peaks are in gray. Notice that, unlike in MMR, in MMB there may be mountains of the same size. 
+This is the MMB structure for $n=9$ (without bagging), with three mountains of sizes $2,2,0$, whose peaks are in gray. 
 
 
-We say two mountains of equal size $s$ are *mergeable*, because they could be merged into a mountain of size $s+1$ by creating a new peak node as the parent of the two old peaks. We follow this rule: whenever we append a new item to list $X$, we add it as a mountain of size $0$ (i.e., a singleton), and if there are mergeable pairs of mountains at that point, we merge *exactly one* such pair, namely the rightmost mergeable pair.
+We say two mountains of equal size $s$ are *mergeable*, as they can be merged into a mountain of size $s+1$ by creating a new peak node as the parent of the two old peaks. We follow this rule: whenever we append a new item to list $X$, we add it as a mountain of size $0$ (i.e., a singleton), and if there are mergeable pairs of mountains at that point, we merge *exactly one* such pair: the rightmost one.
 
 
 ![image](https://hackmd.io/_uploads/rkyZbvQvA.png)
 
-For instance, here we see two append updates, with the new leaf in green and the new merge peak in gray, and mountain peaks represented as triangles. When appending $x_{10}$ we merge two mountains of size $0$ into one of size $1$, and when appending $x_{11}$ we merge two mountains of size $2$ into one of size $3$. 
+For instance, here we see two append updates, with the new leaf in green and the new merge peak in gray. When appending $x_{10}$ we merge two mountains of size $0$ into one of size $1$, and when appending $x_{11}$ we merge two mountains of size $2$ into one of size $3$. 
 
-In contrast, MMR follows the rule that any mergeable pair is merged immediately, but the problem is that it can lead to a domino effect of up to $O(\log n)$ merges after a single append. With our lazy merging rule, we make sure that the complexity of each append remains bounded by a constant. And it can be proven that the rule leads to nice properties: namely, the number of mountains remains of order $O(\log n)$, and the $k$-th most recent leaf is at a depth of $O(\log k)$ in its mountain, regardless of the value of $n$.
+In contrast, MMR follows the rule that any mergeable pair is merged immediately, which can lead to a domino effect of up to $O(\log n)$ merges after a single append. 
+
+With our lazy merging rule, we make sure each append has constant complexity. But more importantly, we make mountains grow at a slow and steady rate, so that the $i$-th rightmost mountain is always of size $\Theta(i)$. In turn, this gives us the asymptotic behavior we want: the $k$-th most recent leaf is at distance $O(\log k)$ to its peak, regardless of the list size $n$.
 
 ### MMB with forward bagging (F-MMB)
 
-Next, we *bag* the mountains, which means adding an upper layer of *bagging nodes* -- one per mountain -- where each bagging node is the parent of one mountain peak and the previous bagging node. We do this to group mountains into a single structure -- a "mountain range" -- with a single root whose hash acts as a commitment to the full list $X$.
+Next, we want to group or *bag* the mountains into a single structure -- a *mountain range* -- to create a single root that commits to the full list $X$. We add an upper layer of *bagging nodes*, where each node is the parent of one peak and the previous bagging node. 
 
 ![image](https://hackmd.io/_uploads/BkbFWaEwC.png)
 
-In the figure we see two possible ways of bagging the same set of mountains: in a backward fashion on the left, and in a forward fashion on the right. In both cases, the root is in brown, peaks in gray, bagging nodes are represented as rhombi, and the symbol $\bullet$ represents a non-existent child node.
+In the figure we see two possible ways of bagging the same set of mountains: in a backward fashion on the left, and in a forward fashion on the right. In each case, the root is in brown, peaks in gray, and the symbol $\bullet$ represents a non-existent child node.
 
-Backward bagging is usually used in MMR: it leads to a more balanced structure because larger mountains (on the left) end up closer to the root, so items with a large leaf-to-peak distance are compensated with a short peak-to-root distance. In contrast, forward bagging keeps the structure unbalanced as larger mountains end up farther from the root. But it preserves the property we want: that the $k$-th most recent leaf remains at a depth of $O(\log k)$ regardless of the value of $n$. And the other important advantage of forward bagging is that we don't need to bag mountains again from scratch after each append, as most bagging nodes don't need to be updated.
+Backward bagging is usually used in MMR: it leads to a more balanced structure because larger mountains (on the left) end up closer to the root, so items with a large leaf-to-peak distance are compensated with a short peak-to-root distance. However, we will embrace unbalancedness and choose forward bagging, for two reasons. 
+
+First, it preserves the property we want: that the $k$-th most recent leaf maintains an $O(\log k)$ depth, regardless of the list size $n$. This is because both the leaf-to-peak and peak-to-root distances will be $O(\log k)$. And second, with forward bagging most bagging nodes don't need to be updated after an append, as changes only happen near the rightmost end of the structure. This optimizes the append operation.
 
 ![image](https://hackmd.io/_uploads/SJO7LpEPC.png)
 
-E.g., here we see a series of append updates, if we use a forward bagging. For simplicity, we hide all non-peak mountain nodes, representing each mountain only by its peak labeled with its mountain size, and we place bagging nodes on a single horizontal level. The new leaf is in green, the merge peak in gray, and we paint in brown the bagging nodes that needed to be updated.
+E.g., here we see a series of append updates, if we use a forward bagging. For simplicity, we hide all non-peak mountain nodes, representing each mountain only by its peak labeled with its mountain size, and we place bagging nodes on a single horizontal level. The new leaf is in green, the merge peak in gray, and the updated bagging nodes in brown.
 
-We see that, with forward bagging, most of the time we only need to update a handful of nodes overall after an append, even when the number of mountains is very large, unlike MMR's backward bagging. 
-
-However, the complexity of an append update is not always bounded by a constant, because from time to time we need to merge two large mountains on the far left side of the structure, in which case we update all bagging nodes above and to the right of the merge peak, i.e., almost all $O(\log n)$ bagging nodes. We solve this issue with our final ingredient.
+It can be proved that, with forward bagging, only two bagging nodes need to be updated on average per append. However, in the worst case we still need to update $O(\log n)$ bagging nodes (i.e., most of them), namely when the mountains being merged are large, and far from the rightmost end of the structure. We need one final ingredient.
 
 ### MMB with double bagging (MMB)
 
-In the final version of MMB, we use neither forward not backward bagging, but we introduce a new type that we call double bagging. Instead of grouping all mountains into a single range, we first partition mountains into subsets, then use forward bagging within each subset to group them into a range, and finally use an extra layer of forward bagging to group all mountain ranges into a *mountain belt*.
+In the final version of MMB, we introduce a more complicated form of forward bagging that we call double bagging. Instead of grouping all mountains into a single range, we partition mountains into subsets, use forward bagging to group each subset into a range, and finally use an extra layer of forward bagging to group all mountain ranges into a *mountain belt*.
 
 ![image](https://hackmd.io/_uploads/Bkz6tDBv0.png)
 
-E.g., here is the final MMB structure for $n=1337$. There are $10$ mountains (represented only by their peaks) partitioned into $5$ ranges, each range is forward bagged with rhombi nodes, and finally the $5$ ranges are forward bagged with circle nodes into one belt, whose root is in brown.
+E.g., here is the final MMB structure for $n=1337$. There are $10$ mountains (represented only by their peaks) partitioned into $5$ mountain ranges, each range is forward bagged with rhombi nodes, and finally the $5$ ranges are forward bagged with circle nodes into one mountain belt, whose root is in brown.
 
-The point of the mountain partitioning is to ensure that each mergeable pairs of mountains sits at the right end of a range. Hence, whenever we merge them, we only need to update one bagging node in its range. And we also only need to update one or two bagging nodes in the outer bagging, because the pair we are merging (the rightmost mergeable pair) always sits in the rightmost or second rightmost range.
+The point of splitting the mountains into several ranges is to ensure that each mergeable pair of mountains sits at the right end of a range. Hence, after a merge, we only need to update one bagging node in the affected range. And importantly, we also only need to update one or two bagging nodes in the outer bagging. This is because we always merge the rightmost mergeable pair, which has to be in either the rightmost or second rightmost range. In turn, this is by our range splitting rules: if there are no mergeable pairs to the right of the affected range, then there cannot be any range splits either.
 
 ![MMBs](https://hackmd.io/_uploads/BJLNCPHw0.png)
 
-Here we see a series of append updates in MMB. Again, the new leaf is in green, the merge peak in gray, and we color in brown all bagging nodes that need to be updated. Notice that at most $4$ bagging nodes are updated, even when we merge large mountains.
+Here we see a series of append updates in MMB. Again, the new leaf is in green, the merge peak in gray, and we color in brown all bagging nodes that need to be updated. 
 
-The full structure will be presented in detail in the research paper, where we will show that we get all the properties we want: an append operation with a complexity bounded by a constant, and the $k$-th most recent leaf at depth $O(\log k)$ regardless of the value of $n$ (i.e. independent of the MMB's size).
+Notice that at most $4$ bagging nodes are updated, even when we merge large mountains! Thus, we achieve a constant complexity for the append operation even in the worst case. 
+
+The full structure will be presented in detail in the research paper, where we will show that we get all the properties we want: an append operation with a constant complexity, and a depth of $O(\log k)$ for the $k$-th most recent leaf, regardless of the list size $n$.
 
 <!---
 ### Comparison of MMB flavors
