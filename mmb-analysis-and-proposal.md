@@ -319,44 +319,56 @@ We propose developing a Rust library readily integrateable by relevant Rust pall
    2. double-bagged MMBs: 8 weeks
    3. membership & ancestry proofs (F-MMBs and double-bagged MMBs): 4 weeks
    
-## Success Reward
+## M7. Success Reward
 The milestones we request funding for above all constitute deliverables that do not depend on externalities, and where the scope of the work is thus more straightforward to estimate. 
 
 However, even if our paper is technically sound, acceptance of the paper by the first conference we submit it to is all but guaranteed. Likewise, the upgrade of MMRs to MMBs within BEEFY on Polkadot requires collaboration with multiple other stakeholders, and thus estimating the required work on our part is unreliable.
 
-In particular, for these milestones, we reckon a long-term incentivization for completing these success metrics is an appropriate alignment.
-We ask for 45'000 CHF fixed fee for completing these milestones, as well as a 30% share of the provable gas savings incurred by our implementation of MMBs against the gas cost that would have been incurred by remaining with MMRs, to be rewarded over the first 10 years post-deployment of MMBs on Polkadot. If the community prefers, we can also reduce the savings share for a perpetual fee - we are happy to receive input on this. In either scenario, if MMBs get replaced by a distinct technology in the future, the fee share would of course terminate.
+In particular, for these milestones, we reckon a long-term incentivization for completing these success metrics is a win-win alignment of incentives:
+1. This approach falls in line with the innovative and -- within crypto -- recently popularized mechanism of retroactive public goods funding (*retroPGF*, https://app.optimism.io/retropgf, https://unchainedcrypto.com/retroactive-public-goods-funding/, https://forum.polkadot.network/t/a-price-discovering-treasury-proposal/9083/10) to give open-source projects that have high impact but no classical exit mechanism like a token a share of their work's upside.
+2. It gives us a clear incentive to continue both maintaining and improving the efficiency of the MMB library, without requiring additional treasury funding. As experts in Polkadot bridges and authentication structures, we are confident we can bring further optimizations to the library for years to come, leading to even more cost savings. 
+3. Usually, there is only a vague sense of how to quantify a project's impact. We are in the unusual position of having a precise and sensible metric (gas cost saving) to measure our proposal's impact.
+
+We ask for 45'000 CHF fixed fee for completing these milestones, as well as a 30% share of the provable gas savings incurred by our implementation of MMBs against the gas cost that would have been incurred by remaining with MMRs, to be rewarded over the first 10 years after the cost savings incurred by upgrading to MMBs have exceeded the upfront cost of our proposal. This means that, in the unlikely scenario that the total cost savings never exceed the upfront cost of the proposal, there will be no success reward (including the fixed fee of 45'000 CHF). 
+
+If the community prefers, we can also reduce the savings share for a perpetual fee - we are happy to receive input on this. In either scenario, if MMBs get replaced by a distinct technology in the future, the fee share would of course terminate.
+
+We'd like to explicitly point out that the payout of these success rewards will *not* occur automatically (such as via integration into Snowbridge's smart contracts), but will be subject to approval by the Treasury, where we will submit referenda that include a calculation of the actual gas cost savings of MMBs against the prior MMR implementation, provable using on-chain data[^success-reward-calculation-method].
 
 We will submit new referenda for paying out these rewards every year, calculated from the total number of Polkadot cross-chain transactions that saved from these fees, and the aggregate gas cost of membership proofs saved by MMBs in these transactions.
 
-### M7. Conference paper review & presentation
-#### Conference
+### Success Criteria
+#### SC1. Academic success: conference paper presentation
 <a id="publication-location"></a>
-In addition to the open-access [arXiv](https://arxiv.org/), we plan to submit the paper for the proceedings of a suitable conference. Choice of conference will be made once the paper is sufficiently close to completion that we can submit it by the proceedings deadline without sacrificing scope & quality of the paper.
-For instance, *Advances in Financial Technologies* or *Financial Cryptography* would be fine candidates for submission.
-The time budget here accounts for preparing the work to be presented at the conference as well as travel & presentation.
+In addition to the open-access [arXiv](https://arxiv.org/), we plan to submit the paper to the proceedings of a suitable conference. The choice of conference will be made once the paper is sufficiently close to completion so that we can submit it by the proceedings deadline without sacrificing scope & quality of the paper. For instance, *Advances in Financial Technologies* or *Financial Cryptography* would be fine candidates for submission. 
 
-#### Review feedback etc.
-Review and addressal of the paper's submission feedback. This milestone may be delayed if anyone provides a solid argument against the technical soundness of the paper. 
+We remark that this goal demands considerable resources, including possibly submitting the paper to multiple conferences, addressing the paper's submission feedback, conference acceptance fees, and of course travel and accommodation costs for attending the conference where we will present our work. We will cover these costs privately.
 
-### M8. Polkadot deployment
+#### SC2. Engineering Success: Polkadot deployment
 Once the library is fully developed and ready for use in BEEFY, it will still have to be deployed. This intense process will not only require our continuous involvement, but also close collaboration with the Technical Fellowship, and for some steps also the Snowfork and/or the Hyperbridge team.
 
 Likewise, the code will have to be audited before deployment on Polkadot. This would either be covered by a separate proposal or via e.g. an SRLabs retainer.
 
 Since these upcoming steps involve multiple moving parts, it is hard to provide a reliable time estimate for completing these.
 
-This work for this milestone is deemed complete once MMBs are deployed within BEEFY on Polkadot and used by at least one bridge, such as Snowfork or Hyperbridge.
+This work for this success criterion is deemed complete once MMBs are deployed within BEEFY on Polkadot and used by at least one bridge, such as Snowfork or Hyperbridge.
+
+#### SC3. [WORKING TITLE] Economic success: Breakeven of costs for community
+Once the library is deployed within BEEFY, it will immediately start saving users' transaction fees. We consider the MMB library to be an economic success once the accrued fee savings it produces for the community exceed the fixed cost of our proposal. 
+
+This success criteria will therefore be reached once the gas cost savings of MMB within BEEFY exceeds 684'000 CHF. This threshold ensures that any success rewards paid cannot result in a net financial loss for the community.
    
 ## Cost of Proposal
-Exclusive of the fixed portion of the [success reward](#Success-Reward), for the 30 weeks of research, we request 270'000 CHF, and for the 41 weeks of implementation, we request 369'000 CHF, totalling 639'000 CHF.  
+Exclusive of the fixed portion of the [success reward](#Success-Reward), for the 36 weeks of research, we request 324'000 CHF, and for the 35 weeks of implementation, we request 315'000 CHF, totalling 639'000 CHF.  
 
-The total DOT allocation will be based on the [Swiss National Bank USD/CHF foreign exchange rate](https://www.snb.ch/en/the-snb/mandates-goals/statistics/statistics-pub/current_interest_exchange_rates), and the 30-day EMA of USD/DOT via [Subscan](https://polkadot.subscan.io/tools/price_converter) onat the date of submission.
+The total DOT allocation will be based on the [Swiss National Bank USD/CHF foreign exchange rate](https://www.snb.ch/en/the-snb/mandates-goals/statistics/statistics-pub/current_interest_exchange_rates), and the 30-day EMA of USD/DOT via [Subscan](https://polkadot.subscan.io/tools/price_converter) at the date of submission.
 
-The 45'000 CHF fixed portion of the [success reward](#Success-Reward) will be claimed retroactively once the paper has been published in conference proceedings and MMBs have been deployed within BEEFY on Polkadot. The variable success rewards will be separately requested annually.
+The 45'000 CHF fixed portion of the [success reward](#Success-Reward) will be claimed retroactively once
+1. The paper has been published in conference proceedings,
+2. MMBs have been deployed within BEEFY on Polkadot, and 
+3. The aggregate gas cost savings of the MMB library exceed the upfront cost of the proposal (639'000 CHF).
 
-We currently reckon the best fit for this proposal is for OpenGov to fund the research milestones and the success reward, and for Technical Fellowship Committee to fund the implementation milestones, given that the Technical Fellowship stewards the Polkadot runtime and any upgrades to it.
-We are open to input on this suggested funding split.
+The variable success rewards will be separately requested annually via Treasury referenda and will only be due once the three points above are completed.
 
 ## Team
 ### Alfonso Cevallos
@@ -404,3 +416,5 @@ When Hyperbridge's Ethereum client receives inbound cross-chain messages (`handl
 [^randao]: After a new MMR/MMB root is relayed via [`submitInitial`](https://github.com/Snowfork/snowbridge/blob/main/contracts/src/BeefyClient.sol#L250-L301) on Snowbridge, there is a mandatory delay of at least 3 epochs, i.e. 19 minutes, before the BEEFY light client's storage is updated with the new root via [`submitFinal`](https://github.com/Snowfork/snowbridge/blob/main/contracts/src/BeefyClient.sol#L343-L391) due to [RanDAO biasability](https://eth2book.info/altair/part3/config/preset/#max_seed_lookahead). Hence, the overall latency of a message sent 15 minutes prior to the root update being initiated is over 30 minutes. 
 
 [^glassnode-maximum-range]: This is the maximum averaging range on Glassnode.
+
+[^success-reward-calculation-method]: At a high-level, we can calculate the gas-cost saving as follows: `gasSaving = gasCostPerProofItem * (proofItemsMMR(leafPosition, accumulatorSize) - proofItemsMMB)`, where `proofItemsMMR(leafPosition, accumulatorSize)` can be calculated as in [here](https://github.com/nervosnetwork/merkle-mountain-range/compare/master...Lederstrumpf:merkle-mountain-range:mmr_profile_proof_size), the `accumulatorSize` can be retrieved from [`BeefyClient.latestBeefyBlock`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L156-L157), the leafPosition can be determined from [`MMRLeaf.parentNumber`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L111-L112), and `proofItemsMMB` will just be the length of the MMB [`leafProof`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L348) once MMBs are deployed.
