@@ -292,20 +292,22 @@ https://eprint.iacr.org/2019/226.pdf
 Flyclient is a good candidate for MMB integration since its sampling protocol is well aligned with the asymmetric membership path length distribution of MMBs: Flyclient predominantly samples recent blocks rather than ancient ones, and MMB path lengths exhibit the same behavior. As such, a Flyclient implementation employing MMBs instead of MMRs would be much more efficient.
 <!--- TODO: extend --->
 
----
-### Implementation Timeframe
-
-The current implementation of MMBs is available here: <https://github.com/w3f/merkle-mountain-belt-clj>
-
-We propose developing a Rust library readily integrateable by relevant Rust pallets such as `pallet-beefy` to be used instead of [`nervosnetwork:merkle-mountain-range`](https://github.com/nervosnetwork/merkle-mountain-range). The library will be licensed under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt). Our time estimate for the implementation of a production-ready MMB library on top of the existing MMR library from Nervos is 41 FTE weeks (i.e. about 9 months) of engineering:
-<!---While Nervos' MMR library has a few...--->
-
 #### M3. Finish PoC in Clojure: **6 weeks (54'000 CHF)**
-   1. implement ancestry proofs: 3 weeks
+   1. implement ancestry proofs[^increment-proofs]: 3 weeks
       *for instance, slashing of cross-chain equivocations requires ancestry proofs*
    2. refactor implementation to facilitate specification process: 1 week
    3. profiling and performance improvements: 2 weeks
       *the Clojure implementation currently exhibits worse asymptotic behavior than we know is theoretically possible. Profiling and performance improvements here are restricted to only cover improvements that will also reflect in the specification and Rust implementation of the library.*
+      
+---
+### Implementation Timeframe
+
+The current implementation of MMBs is available here: 
+<https://github.com/w3f/merkle-mountain-belt-clj>
+
+We propose developing a Rust library readily integrateable by relevant Rust pallets such as `pallet-beefy` to be used instead of [`nervosnetwork:merkle-mountain-range`](https://github.com/nervosnetwork/merkle-mountain-range). The library will be licensed under [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt). Our time estimate for the implementation of a production-ready MMB library on top of the existing MMR library from Nervos is 41 FTE weeks (i.e. about 9 months) of engineering:
+<!---While Nervos' MMR library has a few...--->
+
 #### M4. Spec MMB implementation for porting to Rust: **2 weeks (18'000 CHF)**
    *In particular, this will cover interfaces required for integrations with other pallets (e.g. `pallet-beefy`) as currently provided by `pallet-mmr`*
 #### M5. Rust implementation: unbagged MMBs: **18 weeks (162'000 CHF)** 
