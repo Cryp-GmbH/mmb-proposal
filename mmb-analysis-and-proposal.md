@@ -344,25 +344,35 @@ We propose developing a Rust library readily integrateable by relevant Rust pall
    2. double-bagged MMBs: 8 weeks
    3. membership & [increment proofs](#Writing-budget-12-weeks) (forward- and double-bagged MMBs): 4 weeks
    
-## M7. Success Reward
+Each one of these three milestones will be considered delivered when
+- It has been made publicly available, and 
+- Its content has either been greenlit by at least two members of the Polkadot Technical Fellowship of rank II or higher, or been deployed within Polkadot or Kusama (implicit greenlighting). 
+
+## Cost of Proposal upon Completion
+
+For the 36 weeks of research, we request 324'000 CHF, and for the 35 weeks of implementation, we request 315'000 CHF, totalling 639'000 CHF. 
+
+However, we consider that the proposal merely being *completed* is much different than it being *successful*, and these outcomes should be rewarded distinctly. In fact, we see the potential for our project to be very successful. Hence, to put our money where our mouth is, we are willing to cut our payment to only 70% upon completion, with the rest paid upon success. 
+
+It will work as follows. Once M1 is delivered, the payment will be of $162'000\mbox{ CHF} \times 0.7 = 113'500\mbox{ CHF}$, and so on for each milestone. Hence, the total cost of the proposal upon completion of milestones 1 through 6 will be $639'000\mbox{ CHF} \times 0.7 = 447'300$ CHF. 
+
+*The cost of each milestone will be due in USDC based on the [Swiss National Bank USD/CHF foreign exchange rate](https://www.snb.ch/en/the-snb/mandates-goals/statistics/statistics-pub/current_interest_exchange_rates) at the date of submission.*
+
+The remaining 30% of 639'000 CHF will only be paid if and when the project meets all three of the success criteria defined in the [success reward section](#Success-Reward). In particular, one of these criteria requires that the effect of the proposal is economically net-positive for the community. 
+
+*This 30% portion, i.e., $639'000\mbox{ CHF} \times 0.3 = 191'700 \mbox{ CHF}$, will be due in DOT based on the [Swiss National Bank USD/CHF foreign exchange rate](https://www.snb.ch/en/the-snb/mandates-goals/statistics/statistics-pub/current_interest_exchange_rates), and the 30-day EMA of USD/DOT via [Subscan](https://polkadot.subscan.io/tools/price_converter) at the date of submission.*
+
+Notice that the success reward structure contains additional rewards, one fixed and one proportional to our library's incurred savings. Hence, the total cost of the proposal may be greater than 639'000 CHF if the deployment is an economic success, but strictly in proportion to the savings it brings to the community. See the following section for details.
+
+## Success Reward
 The milestones we request funding for above all constitute deliverables that do not depend on externalities, and where the scope of the work is thus more straightforward to estimate. 
 
 However, even if our paper is technically sound, acceptance of the paper by the first conference we submit it to is all but guaranteed. Likewise, the upgrade of MMRs to MMBs within BEEFY on Polkadot requires collaboration with multiple other stakeholders, and thus estimating the required work on our part is unreliable.
 
-In particular, for these milestones, we reckon a long-term incentivization for completing these success metrics is a win-win alignment of incentives:
-1. This approach falls in line with the innovative and -- within crypto -- recently popularized mechanism of retroactive public goods funding (*retroPGF*, https://app.optimism.io/retropgf, https://unchainedcrypto.com/retroactive-public-goods-funding/, https://forum.polkadot.network/t/a-price-discovering-treasury-proposal/9083/10) to give open-source projects that have high impact but no classical exit mechanism like a token a share of their work's upside.
-2. It gives us a clear incentive to continue both maintaining and improving the efficiency of the MMB library, without requiring additional treasury funding. As experts in Polkadot bridges and authentication structures, we are confident we can bring further optimizations to the library for years to come, leading to even more cost savings. 
-3. Usually, there is only a vague sense of how to quantify a project's impact. We are in the unusual position of having a precise and sensible metric (gas cost saving) to measure our proposal's impact.
-
-We ask for 45'000 CHF fixed fee for completing these milestones, as well as a 30% share of the provable gas savings incurred by our implementation of MMBs against the gas cost that would have been incurred by remaining with MMRs, to be rewarded over the first 10 years after the cost savings incurred by upgrading to MMBs have exceeded the upfront cost of our proposal. This means that, in the unlikely scenario that the total cost savings never exceed the upfront cost of the proposal, there will be no success reward (including the fixed fee of 45'000 CHF). 
-
-If the community prefers, we can also reduce the savings share for a perpetual fee - we are happy to receive input on this. In either scenario, if MMBs get replaced by a distinct technology in the future, the fee share would of course terminate.
-
-We'd like to explicitly point out that the payout of these success rewards will *not* occur automatically (such as via integration into Snowbridge's smart contracts), but will be subject to approval by the Treasury, where we will submit referenda that include a calculation of the actual gas cost savings of MMBs against the prior MMR implementation, provable using on-chain data[^success-reward-calculation-method].
-
-We will submit new referenda for paying out these rewards every year, calculated from the total number of Polkadot cross-chain transactions that saved from these fees, and the aggregate gas cost of membership proofs saved by MMBs in these transactions.
-
 ### Success Criteria
+
+We therefore define the following three sucess criteria for our project, which are subject to externalities. Any success reward will only be paid once all three of these creteria are met.
+
 #### SC1. Academic success: conference paper presentation
 <a id="publication-location"></a>
 In addition to the open-access [arXiv](https://arxiv.org/), we plan to submit the paper to the proceedings of a suitable conference. The choice of conference will be made once the paper is sufficiently close to completion so that we can submit it by the proceedings deadline without sacrificing scope & quality of the paper. For instance, *Advances in Financial Technologies* or *Financial Cryptography* would be fine candidates for submission. 
@@ -376,24 +386,32 @@ Likewise, the code will have to be audited before deployment on Polkadot. This w
 
 Since these upcoming steps involve multiple moving parts, it is hard to provide a reliable time estimate for completing these.
 
-This work for this success criterion is deemed complete once MMBs are deployed within BEEFY on Polkadot and used by at least one bridge, such as Snowfork or Hyperbridge.
+This work for this success criterion is deemed complete once MMBs are deployed within BEEFY on Polkadot/JAM and used by at least one bridge, such as Snowfork or Hyperbridge.
 
-#### SC3. [WORKING TITLE] Economic success: Breakeven of costs for community
+#### SC3. Economic success: Breakeven of costs for community
 Once the library is deployed within BEEFY, it will immediately start saving users' transaction fees. We consider the MMB library to be an economic success once the accrued fee savings it produces for the community exceed the fixed cost of our proposal. 
 
-This success criteria will therefore be reached once the gas cost savings of MMB within BEEFY exceeds 684'000 CHF. This threshold ensures that any success rewards paid cannot result in a net financial loss for the community.
-   
-## Cost of Proposal
-Exclusive of the fixed portion of the [success reward](#Success-Reward), for the 36 weeks of research, we request 324'000 CHF, and for the 35 weeks of implementation, we request 315'000 CHF, totalling 639'000 CHF.  
+This success criterion will therefore be reached once the Polkadot/JAM ecosystem's cost savings of MMB against MMR exceeds 684'000 CHF[^success-reward-calculation-method]. This amount corresponds to the full cost of completing milestones 1 through 6 (639'000 CHF) and the costs linked to completing these three success criteria (45'000 CHF; this latter compensation will be defined later). This threshold ensures that any success rewards paid cannot result in a net financial loss for the community.
 
-The total DOT allocation will be based on the [Swiss National Bank USD/CHF foreign exchange rate](https://www.snb.ch/en/the-snb/mandates-goals/statistics/statistics-pub/current_interest_exchange_rates), and the 30-day EMA of USD/DOT via [Subscan](https://polkadot.subscan.io/tools/price_converter) at the date of submission.
+### Reward Structure
 
-The 45'000 CHF fixed portion of the [success reward](#Success-Reward) will be claimed retroactively once
-1. The paper has been published in conference proceedings,
-2. MMBs have been deployed within BEEFY on Polkadot, and 
-3. The aggregate gas cost savings of the MMB library exceed the upfront cost of the proposal (639'000 CHF).
+As we mentioned before, we think that our project has the potential to be very successful, far beyond mere completion, and bring lots of value to the community. We considering it fitting to have a long-term incentivization structure in place, for the following reasons:
 
-The variable success rewards will be separately requested annually via Treasury referenda and will only be due once the three points above are completed.
+1. This approach falls in line with the innovative and -- within crypto -- recently popularized mechanism of retroactive public goods funding (*retroPGF*, https://app.optimism.io/retropgf, https://unchainedcrypto.com/retroactive-public-goods-funding/, https://forum.polkadot.network/t/a-price-discovering-treasury-proposal/9083/10) to give open-source projects that have high impact but no classical exit mechanism -- like a token or an IPO -- a share of their work's upside.
+2. It gives us a clear incentive to continue both maintaining and improving the efficiency of the MMB library, without requiring additional treasury funding. As experts in Polkadot bridges and authentication structures, we are confident we can bring further optimizations to the library for years to come, leading to even more cost savings. This aligns our long-term incentives with those of the community.
+3. Usually, there is only a vague sense of how to quantify a project's impact. We are in the unusual position of having a precise and sensible metric (gas cost saving) to measure our proposal's impact.
+
+We propose a reward structure with three components, all of which will be triggered at the moment that all three success criteria are met: 
+
+- The remaining 30% of the cost of completion of Milestones 1-6, that was mentioned in the [Cost of Proposal upon Completion](#Cost-of-Proposal-upon-Completion) section, i.e., $639'000\mbox{ CHF} \times 0.3 = 191'700 \mbox{ CHF}$.
+- A fixed fee of $45'000\mbox{ CHF}$, to account for our accrued cost in achieving the three success criteria, and
+- A variable reward consisting of 30% share of the provable cost savings incurred by our implementation of MMB against the cost that would have been incurred by remaining with MMR, to be rewarded over 10 years, starting from the moment all three success criteria are met. 
+
+We highlight that the third success criterion ensures that these rewards will only be paid once a net positive economic outcome is guaranteed for the community. In the unlikely scenario that the total cost savings never exceed the upfront cost of the proposal, there will be no success rewards. 
+
+If the community prefers, we can also reduce the savings share for a perpetual fee - we are happy to receive input on this.
+
+We'd like to explicitly point out that the payout of these success rewards will *not* occur automatically (such as via integration into Snowbridge's smart contracts), but will be subject to approval by the Treasury, where we will submit referenda that include a calculation of the actual cost savings of the MMB library against the prior MMR implementation, provable using on-chain data[^success-reward-calculation-method]. In particular, the variable rewards will require a yearly referendum to be approved. 
 
 ## Team
 ### Alfonso Cevallos
