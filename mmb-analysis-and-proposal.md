@@ -30,11 +30,11 @@
 
 ## Intro 
 
-Imagine this: by the beginning of 2026, decentralized applications have gained a significant foothold in the world finances. With them, blockchain platforms such as Polkadot and Ethereum move millions of dollars worth of value every day, and a successful DOT-ETH bridge is one of the top five cross-chain bridges in use. To realize this future for Polkadot, the time is NOW to build the most efficient and secure bridge out there. Yet this might not happen if the related bridging costs remain as high as they are now.
+Imagine this: by the beginning of 2026, decentralized applications have gained a significant foothold in the world finances. With them, blockchain platforms such as Polkadot and Ethereum move millions of dollars worth of value every day, and a successful DOT🡘ETH bridge is one of the top five cross-chain bridges in use. To realize this future for Polkadot, the time is NOW to build the most efficient and secure bridge out there. Yet this might not happen if the related bridging costs remain as high as they are now[^discussions-on-current-cost].
 
-We propose developing a brand new data structure called Merkle Mountain Belt (MMB), namely both its theoretical and implementation sides, that would replace the use of the Merkle Mountain Range (MMR) in the BEEFY protocol used by bridges like Snowbridge and Hyperbridge. This change will considerably reduce the size of cross-chain message proofs in the bridge[^hyperbridge-operational-cost], in turn reducing the transaction costs for users, with estimated savings of one to two million dollars [per year](#Traffic-Estimate), at current prices.
+We propose developing a brand new data structure called Merkle Mountain Belt (MMB), namely both its theoretical and implementation sides, that would replace the use of the Merkle Mountain Range (MMR) in the BEEFY protocol used by bridges like Snowbridge and Hyperbridge. This change will considerably reduce the size of cross-chain message proofs in DOT→ETH bridging[^hyperbridge-operational-cost], in turn reducing the transaction costs for users, with estimated savings of one to two million dollars [per year](#Traffic-Estimate), at current prices.
 
-We also propose writing a research paper in collaboration with Alistair Stewart, Head of Research at Web3 Foundation, about the new data structure, and publishing it in a top rated computer science conference. Polkadot has always been a thought leader in blockchain technology, being one of the few communities that pioneers top quality research, and not just bells and whistles. This proposal honors this tradition. MMRs are currently widely used across multiple blockchains, and improving upon them with MMBs would heighten Polkadot's impact on and reputation within the wider ecosystem.
+We also propose writing a research paper in collaboration with Alistair Stewart, Head of Research at Web3 Foundation, about the new data structure, and publishing it in a top rated computer science conference. Polkadot has always been a thought leader in blockchain technology, being one of the few communities that pioneers top quality research, and not just bells and whistles. This proposal honors this Polkadot tradition. MMRs are currently widely used across multiple blockchains, and improving upon them with MMBs would heighten Polkadot's impact on and reputation within the wider ecosystem.
 
 The members of our [team](#Team) are highly qualified and have worked in Polkadot since pre-mainnet days. Our principal researcher Alfonso has a Ph.D. in mathematics and is a co-author of many Polkadot papers, including the [2020 overview paper](https://arxiv.org/abs/2005.13456). Our principal developer Robert has been one of the earliest stewards of the Polkadot-Ethereum bridge, going back to its initial W3F grant, design of protocols, and implementation.
 
@@ -42,7 +42,7 @@ The members of our [team](#Team) are highly qualified and have worked in Polkado
 
 :::info
 **TLDR of MMBs & cost analysis:**
-The MMB data structure serves as a plug-in replacement for MMR, to produce BEEFY commitments, which are used by the DOT-ETH bridges. Over the next 5 years, MMB would save [over 40% of proof size](https://docs.google.com/spreadsheets/d/1CIANkTytd6qVo_oc_r2EYzdschoACzgyIa5OiMmPy0I/edit?gid=174519946#gid=174519946) against the current MMR implementation. From our gas and cost estimates, this corresponds to $1.25 of savings per transaction.
+The MMB data structure serves as a plug-in replacement for MMR, to produce BEEFY commitments, which are primarily used by the DOT🡘ETH bridges. Over the next 5 years, MMB would [reduce the average proof size by over 40%](https://docs.google.com/spreadsheets/d/1CIANkTytd6qVo_oc_r2EYzdschoACzgyIa5OiMmPy0I/edit?gid=174519946#gid=174519946) compared to the current MMR implementation. From our gas and cost estimates, this corresponds to $1.25 of savings per transaction.
 <!---If Polkadot's BEEFY bridges have comparable volume--->
 :::
 
@@ -53,7 +53,7 @@ Balanced Merkle trees, hash chains, and Merkle Mountain Ranges (MMRs) are three 
 
 These data structures are used everywhere in blockchain and allow for any entity to query and authenticate specific data efficiently, without having to follow consensus, download the full state, nor trust any one full node. The aforementioned structures have different properties, and one or other will be chosen depending on the specific use case. The right choice of structure can drastically reduce the corresponding data authentication costs. 
 
-The Merkle Mountain Belt (MMB) is a new member of this family of Merkle structures, optimized specifically for the use case of BEEFY, the protocol designed for efficient DOT-ETH bridging: Via BEEFY, a smart contract on Ethereum periodically receives a digest of the current state of Polkadot, with a refresh rate in the order of minutes to a couple hours, and bridge users authenticate Polkadot events on Ethereum with the help of this digest. 
+The Merkle Mountain Belt (MMB) is a new member of this family of Merkle structures, optimized specifically for the use case of BEEFY, the protocol designed for efficient DOT🡘ETH bridging: Via BEEFY, a smart contract on Ethereum periodically receives a digest of the current state of Polkadot, with a refresh rate in the order of minutes to a couple hours, and bridge users authenticate Polkadot events on Ethereum with the help of this digest. 
 
 To oversimplify, we can say that if bridge users mostly care about Polkadot events from the last block, then the most efficient commitment scheme would be a hash chain, while if they care about very old data, the most efficient scheme would be an MMR. The MMB is a "best of both worlds" structure whose performance is always comparable to the better of the two former schemes, for any possible distribution of queries. But crucially, it outperforms them both in the case that users' queries are concentrated on events that took place in the time range from the last minute to the last day.[^comparison] 
 
@@ -61,7 +61,7 @@ Let's get into details.
 
 ### Technical features
 
-Consider an item list $X=(x_1, x_2, \cdots, x_n)$ onto which new items are constantly being appended. This could be one of many databases, such as XCMP messages, but in our primary use case items correspond to Polkadot relay chain blocks[^mmr-leaf-content]. MMB is a data structure built on top of $X$ that produces a compact commitment to it. Its features are: 
+Consider an item list $X=(x_1, x_2, \cdots, x_n)$ onto which new items are constantly being appended. This could be one of many databases, such as XCMP messages, but in our primary use case items correspond to Polkadot relay chain blocks.[^mmr-leaf-content] MMB is a data structure built on top of $X$ that produces a compact commitment to it. Its features are: 
 
 * faster (constant time) updates after each append, and 
 * shorter membership proofs for recently appended items.
@@ -126,7 +126,7 @@ We see that MMB produces shorter proofs in expectation than both MMR and a hash 
 
 ## Cost savings analysis against MMRs
 
-In an Ethereum bridge, a smart contract on Ethereum stores a commitment to Polkadot's state. Currently, this commitment is built with an MMR, where a new leaf is added for each Polkadot relay chain block, and in turn each leaf contains commitments to parachain headers. When a message (that, e.g., encodes a transaction) goes over the bridge, either a user or a relayer has to authenticate it in the smart contract, by attaching an MMR proof and a header proof to the message:
+In an Ethereum bridge, a smart contract on Ethereum stores a commitment to Polkadot's state. Currently, this commitment is built with an MMR, where a new leaf is added for each Polkadot relay chain block, and in turn each leaf contains commitments to parachain headers. For Snowbridge, when a message (that, e.g., encodes a transaction) goes over the bridge, either a user or a relayer has to authenticate it in the smart contract, by attaching an MMR proof and a header proof to the message:
 1. The MMR proof shows that the MMR (whose root is held in smart contract) commits to a leaf, which in turns commits to a particular parachain header.
 2. The header proof shows that this parachain header indeed contains the claimed content, such as a message.
 
@@ -239,11 +239,11 @@ F-MMBs are also simpler to implement than MMBs, because they use a simpler baggi
 This funding request forks into a research and an implementation track. The key deliverables are
 1. a research paper,
 2. an analysis of implementation candidates for MMB in addition to BEEFY bridging, and
-3. a Rust implemenation of Merkle Mountain Belts integrated as a frame pallet, together with any necessary changes to Snowfork's BEEFY client necessary to accommodate:
+3. a Rust implementation of Merkle Mountain Belts integrated into a frame pallet, together with any necessary changes to Snowfork's BEEFY client necessary to accommodate:
 https://github.com/Snowfork/snowbridge/blob/main/contracts/src/BeefyClient.sol
 
-The additional success milestones are described in the [success reward section](#Success-Reward). The key deliverables for this track are
-1. publication of the MMB research paper in a well-respected journal, and
+An additional success milestone is described in the [success reward section](#Success-Reward). The key deliverables for this track are
+1. publication of the research paper in a well-respected conference, and
 2. deployment of MMBs in Polkadot's BEEFY protocol.
 
 ### Research Timeframe 
@@ -273,7 +273,7 @@ Here are a few of the areas we will research:
 ##### XCMP
 If, as currently envisioned, XCMP has unordered message delivery, then MMBs are a suitable data structure to use as a drop-in replacement for MMRs. The advantages of MMBs for this use case are: 
 
-- much shorter proofs (and hence smaller operational costs) since, again, membership queries will be made mostly for recent messages; and 
+- much shorter proofs (and hence smaller operational costs) since, again, queries and authentication will be made mostly for recent messages; and 
 - on top of archival nodes who store full databases, MMBs allow for the network to have lighter nodes who only store the last $k$ messages (for an adecuate value of $k$), and whose running costs depend only on $k$ and not on $n$  (the total number of messages), yet produce the same membership proofs for recent items than archival nodes.
 
 This flavor of MMBs would not be append-only (vis-à-vis for MMRs), but would require an update protocol allowing leaves to be replaced. An update proof replacing the prior item $x$ with item $x'$ could naively be achieved by first providing a membership proof for $x$ relative to the current MMB root $r$ (the known commitment), and then re-using the verified proof items to calculate the new root $r'$ from $x'$.
@@ -403,7 +403,9 @@ focus on scalability, security and incentives of decentralized protocols.
 
 [^n-sampling-range]: 10 blocks per minute: `10*60*24*365*2=10512000`, `10*60*24*365*7=36792000`
 
+<!---
 [^increment-proofs]: Increment proofs (also known as ancestry proofs) are used to prove that the current state of the commitment scheme (such as an MMR or MMB) descends from a prior canonical state, i.e., it was updated only with appends (and no deletions). They are for instance used in the slashing protocol of the bridge: https://github.com/paritytech/polkadot-sdk/pull/1903
+--->
 
 [^relayer-frequency]: Relayers frequently prove inclusion of a message in a parachain header. In fact on Snowbridge, all messages on a particular channel have to be processed [sequentially](https://github.com/Snowfork/snowbridge/blob/c8ea65c5b54c8befc40910a367fb0edf3f528b33/contracts/src/Gateway.sol#L141-L149). Hence if relayers are working reliably, then only recent messages are unprocessed at any given time. 
 
@@ -419,4 +421,6 @@ When Hyperbridge's Ethereum client receives inbound cross-chain messages (`handl
 
 [^audit-cost]: Based on our current MMB implementation in Clojure, we have received a quote from Oak Security of 74'800 USD for auditing the Rust library. We reckon Oak Security is in an ideal position to audit the MMB implementation since they have already audited [various iterations of Snowbridge](https://github.com/oak-security/audit-reports/tree/main/Snowbridge) and are therefore very familiar with the usage context.
 
-[^success-reward-calculation-method]: At a high-level, we can calculate the gas-cost saving as follows: `gasSaving = gasCostPerProofItem * (proofItemsMMR(leafPosition, accumulatorSize) - proofItemsMMB)`, where `proofItemsMMR(leafPosition, accumulatorSize)` can be calculated as in [here](https://github.com/nervosnetwork/merkle-mountain-range/compare/master...Lederstrumpf:merkle-mountain-range:mmr_profile_proof_size), the `accumulatorSize` can be retrieved from [`BeefyClient.latestBeefyBlock`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L156-L157), the leafPosition can be determined from [`MMRLeaf.parentNumber`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L111-L112), and `proofItemsMMB` will just be the length of the MMB [`leafProof`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L348) once MMBs are deployed.
+[^success-reward-calculation-method]: At a high-level, for the case of Snowbridge, we can calculate the cost saving as follows: `gasSaving = gasCostPerProofItem * (proofItemsMMR(leafPosition, accumulatorSize) - proofItemsMMB)`, where `proofItemsMMR(leafPosition, accumulatorSize)` can be calculated as in [here](https://github.com/nervosnetwork/merkle-mountain-range/compare/master...Lederstrumpf:merkle-mountain-range:mmr_profile_proof_size), the `accumulatorSize` can be retrieved from [`BeefyClient.latestBeefyBlock`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L156-L157), the leafPosition can be determined from [`MMRLeaf.parentNumber`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L111-L112), and `proofItemsMMB` will just be the length of the MMB [`leafProof`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L348) once MMBs are deployed.
+
+[^discussions-on-current-cost]: The current cost of DOT→ETH bridging -- even with the recent decrease to ~6 DOT per transfer -- has been raised in the community as a growth painpoint for growth of Snowbridge usage. See for instance related discussions here: [1](https://polkadot.subsquare.io/referenda/1127), [2](https://x.com/Erwin_Schroedy/status/1831266621614145603), [3](https://x.com/ClaraVanStaden/status/1831426063551066292)
