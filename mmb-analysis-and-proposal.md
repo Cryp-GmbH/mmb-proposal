@@ -249,20 +249,28 @@ An additional success milestone is described in the [success reward section](#Su
 ### Research Timeframe 
 ---
 #### M1. Paper: **18 weeks (162'000 CHF)**
-The primary milestone of the research track is completing a paper on MMBs currently in the works. The timeframe for completion of this paper is so short since a lot of the work for the paper has already been completed by the team members in collaboration with Alistair Stewart, for which we already received funding from Web 3 Foundation, and we are not asking for any of this prior work to be funded again. Alistair Stewart will also be a co-author on the paper.
+The primary milestone of the research track is completing a paper on MMBs currently in the works. The timeframe for completion of this paper is so short since a lot of the work has already been completed by the team members in collaboration with Alistair Stewart, for which we already received funding from Web3 Foundation, and we are not asking for any of this prior work to be funded again. Alistair Stewart will be a co-author on the paper.
 
-This paper will present the novel data structures U-MMBs, F-MMBs, and MMBs. The paper will also compare the MMB flavors with existing data structures like hash chains and two variants of MMRs.
+The paper will present the novel data structure MMB, as well as its variants U-MMB and F-MMB. We will make a thorough comparison of these structures against (several variants of) MMR and the hash chain, highlighting the pros and cons of each one. In particular, we will focus our analysis on blockchain applications, and how these structures fit in the design of light client protocols. 
+
+
 ##### Writing budget: 12 weeks
-Completion of paper, such as
-1. adding missing proofs 
-2. adding pseudo-algorithms, and
-3. completing the analysis of amortized membership proof sizes.
+Completion of paper, including considerable work needed in:
+
+1. An analysis of amortized proof sizes for variants of MMB and MMR, i.e., find the exact constants hidden in big-O notations for long-term performance. 
+3. An analysis of asynchrony: how we can make an outdated MMB proof remain valid against an updated commitment, and vice-versa. 
+4. Increment proofs: how to efficiently prove that an old commitment actually corresponds an earlier version (a prefix) of the canonical blockchain, and not to a fork with invalid blocks. For instance, slashing of cross-chain equivocations requires increment proofs.
+5. Pseudo-algorithms, and
+6. Missing proofs. 
+
 
 ##### UTXO analysis: 6 weeks
 
-To substantiate our hypothesis that membership proofs for recent items of a committed data base are accessed much more frequently than ancient items, we analyse the lifespan of UTXOs before being spent. In particular, Bitcoin and ZCash will be analysed.
-This time budget accounts for both data collection and analysis timeframes.
-The analysis will employ a more differential methodology than exhibited here:
+Notice that MMB gives shorter proofs to recent items in the committed database. We conjecture that this is universally appealing for blockchain applications, because it is often the case that recently generated data needs to be queried and authenticated much more frequently than older data. 
+
+To substantiate our conjecture, and add important theoretical motivation to the paper, we will study the lifespan of transaction outputs (TXOs), measured in blocks, from their creation until the time they are spent. In particular, Bitcoin and unshielded ZCash will be analysed, as their data is vast and easily accessible. Is this distribution heavily skewed towards recency? Would MMB make for a shorter proof size in expectation, relative to MMR? Following our conjecture, this should be the case, but it will have to be justified with data.
+
+This milestone's time budget accounts for anticipated research timeframes such as data collection, analysis, and bibliographic research. The analysis we envision will employ a more differential methodology than exhibited here:
 https://www.nature.com/articles/s41597-022-01254-0
 
 ---
@@ -276,11 +284,21 @@ If, as currently envisioned, XCMP has unordered message delivery, then MMBs are 
 - much shorter proofs (and hence smaller operational costs) since, again, queries and authentication will be made mostly for recent messages; and 
 - on top of archival nodes who store full databases, MMBs allow for the network to have lighter nodes who only store the last $k$ messages (for an adecuate value of $k$), and whose running costs depend only on $k$ and not on $n$  (the total number of messages), yet produce the same membership proofs for recent items than archival nodes.
 
-This flavor of MMBs would not be append-only (vis-à-vis for MMRs), but would require an update protocol allowing leaves to be replaced. An update proof replacing the prior item $x$ with item $x'$ could naively be achieved by first providing a membership proof for $x$ relative to the current MMB root $r$ (the known commitment), and then re-using the verified proof items to calculate the new root $r'$ from $x'$.
+This flavor of MMBs would not be append-only (vis-à-vis for MMRs), but would require an update protocol allowing leaves to be replaced. An update proof replacing the prior item $x$ with item $x'$ could naively be achieved by first providing a membership proof for $x$ relative to the current MMB root $r$ (the known commitment), and then re-using the verified proof items to calculate the new root $r'$ from $x'$. Again, shorter proofs would make this update faster.
+
+Note that the benefit of shorter proofs for recent items in MMB is doubled in an (on-chain!) update protocol since the co-path for the item has to be traversed twice: once for the membership proof, and then again for the calculation of the new root.
 
 ##### Account-based chain analysis
 The UTXO analysis we will include in the paper substantiates our hypothesis, but extending it to account-based chains is more applicable to the DOT🡘ETH bridge.
 <!--- TODO: extend --->
+
+##### Performance of different Merkle structures for a given sampling distribution 
+
+Assume you are given a database $X$, and you know that items will be queried from it by users following a specific distribution. What Merkle structure should you use to commit to $X$, to minimize the expected proof size of the queried items? For instance, we can intuitively guess that if the distribution is uniform, we should use a balanced Merkle tree, but if half of all queries are for one item, then we should place this item's leaf as a direct child of the root. 
+
+We would like to make a thorough analysis of this question for commonly observed distributions, such as exponential distributions and zeta distributions. This would be a valuable guide for blockchain protocol designers, so they know exactly what Merkle structure to use for each use case.
+
+In fact, we conjecture that MMB and their variants will be ideal structures for various members of the family of zeta distributions, which are common in real-life scenarios.
 
 <!--- TODO: add
 ##### POPOS (TODO)
@@ -289,15 +307,22 @@ https://arxiv.org/pdf/2209.08673.pdf
 
 ##### Flyclient integration
 https://eprint.iacr.org/2019/226.pdf
-Flyclient is a good candidate for MMB integration since its sampling protocol is well aligned with the asymmetric membership path length distribution of MMBs: Flyclient predominantly samples recent blocks rather than ancient ones, and MMB path lengths exhibit the same behavior. As such, a Flyclient implementation employing MMBs instead of MMRs would be much more efficient.
-<!--- TODO: extend --->
+The light-client protocol Flyclient is a good candidate for MMB integration since its sampling protocol is well aligned with the asymmetric distribution of membership proof sizes of MMBs: to have a probabilistic guarantee of correctess in the construction of a PoW blockchain, Flyclient samples blocks at random, but with a heavy bias towards more recent blocks. Hence, having a commitment scheme that gives recent blocks shorter proofs, may make the Flyclient implementation more efficient. 
 
-#### M3. Finish PoC in Clojure: **6 weeks (54'000 CHF)**
-   1. implement ancestry proofs[^increment-proofs]: 3 weeks
-      *for instance, slashing of cross-chain equivocations requires ancestry proofs*
-   2. refactor implementation to facilitate specification process: 1 week
-   3. profiling and performance improvements: 2 weeks
-      *the Clojure implementation currently exhibits worse asymptotic behavior than we know is theoretically possible. Profiling and performance improvements here are restricted to only cover improvements that will also reflect in the specification and Rust implementation of the library.*
+
+#### M3. Finish PoC in Clojure: **6 weeks (54'000 CHF)** 
+
+It is common for research papers about new algorithms, to include a proof-of-concept implementation, to show there are no hidden obstacles to its applicability. This Clojure implementation will be published as open source, and referenced to in the paper. We highlight that it is already at an advanced stage, and that it will be also an invaluable tool for us as we build the (much more complex) Rust implementation of the library. 
+
+   1. Implement [increment proofs](#Writing-budget-12-weeks): 3 weeks
+   2. Refactor implementation to facilitate specification process: 1 week
+   3. Profiling and performance improvements: 2 weeks
+      
+*The Clojure implementation currently exhibits worse asymptotic behavior than we know is theoretically possible. Profiling and performance improvements here are restricted to only cover improvements that will also reflect in the specification and Rust implementation of the library.* 
+
+Each one of these three milestones will be considered delivered when
+- It has been made publicly available, and 
+- Its content has been greenlit by at least two members of the research team at Web3 Foundation. 
       
 ---
 ### Implementation Timeframe
@@ -313,11 +338,11 @@ We propose developing a Rust library readily integrateable by relevant Rust pall
 #### M5. Rust implementation: unbagged MMBs: **18 weeks (162'000 CHF)** 
    1. data storage: 4 weeks
    2. U-MMBs: 12 weeks
-   3. membership & ancestry proofs (for U-MMBs only): 2 weeks
+   3. membership & increment proofs (for U-MMBs only): 2 weeks
 #### M6. Rust implementation: bagged MMBs: **15 weeks (135'000 CHF)**
    1. forward-bagged MMBs: 3 weeks
    2. double-bagged MMBs: 8 weeks
-   3. membership & ancestry proofs (F-MMBs and double-bagged MMBs): 4 weeks
+   3. membership & [increment proofs](#Writing-budget-12-weeks) (forward- and double-bagged MMBs): 4 weeks
    
 ## M7. Success Reward
 The milestones we request funding for above all constitute deliverables that do not depend on externalities, and where the scope of the work is thus more straightforward to estimate. 
@@ -394,7 +419,7 @@ focus on scalability, security and incentives of decentralized protocols.
 ### Cryp GmbH
 - R&D consultancy founded 2019 in Biel, Switzerland
 - Specialises on cross-chain protocols
-- History of consulting for variety of both local (e.g. Web 3.0 Foundation & SwissQuote) and international clients (e.g. Parity & Tari Labs)
+- History of consulting for variety of both local (e.g. Web3 Foundation & SwissQuote) and international clients (e.g. Parity & Tari Labs)
 - Researched & implemented [BTC⇆XMR atomic swaps](https://github.com/farcaster-project) (successfully completed in Q1 2023 from Monero community's [CCS crowdfund grant](https://ccs.getmonero.org/proposals/h4sh3d-atomic-swap-implementation.html)). This has spawned a broad ecosystem for atomic swaps with Monero, such as [ETH⇆XMR](https://github.com/AthanorLabs/atomic-swap), [NMC⇆XMR](https://www.namebrow.se/name/d/atomic-trophy/), and various other pairs via [BasicSwap](https://github.com/tecnovert/basicswap/tree/master).
 
 [^hyperbridge-operational-cost]: For Hyperbridge, MMBs will also reduce the operational cost of the bridge, since consensus update proofs already prove membership of the last leaf in the MMR root commitment: https://github.com/polytope-labs/hyperbridge/blob/8e129796b4b7b0b8e7612625cc4d2592b0818b3b/evm/src/consensus/BeefyV1.sol#L167, https://github.com/polytope-labs/hyperbridge/blob/8e129796b4b7b0b8e7612625cc4d2592b0818b3b/evm/src/consensus/ZkBeefy.sol#L151
