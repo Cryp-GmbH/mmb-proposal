@@ -8,7 +8,7 @@
 0. [Intro](#Intro)
 1. [MMB overview](#MMB-overview)
     a. [Technical features](#Technical-features)
-    b. [Faster append times](#Faster-update-times)
+    b. [Faster update times](#Faster-update-times)
     c. [Shorter membership proofs](#Shorter-membership-proofs)
 2. [Cost saving analysis against MMRs](#MMBs-in-BEEFY)
     a. [Cost savings per transaction](#Cost-Estimate)
@@ -20,8 +20,8 @@
 4. [Research & Implementation Timeframes](#Timeframes)
     a. [Research Timeframe](#Research-Timeframe)
     b. [Implementation Timeframe](#Implementation-Timeframe)
-5. [Success Reward Milestones](#Success-Reward)
-6. [Cost of Proposal](#Cost-of-Proposal)
+5. [Cost of Proposal upon Completion](#Cost-of-Proposal-upon-Completion)
+6. [Success Reward](#Success-Reward)
 7. [Team](#Team)
 
 <!---
