@@ -32,7 +32,7 @@
 
 Imagine this: by the beginning of 2026, decentralized applications have gained a significant foothold in the world finances. With them, blockchain platforms such as Polkadot and Ethereum move millions of dollars worth of value every day, and a successful DOT🡘ETH bridge is one of the top five cross-chain bridges in use. To realize this future for Polkadot, the time is NOW to build the most efficient and secure bridge out there. Yet this might not happen if the related bridging costs remain as high as they are now[^discussions-on-current-cost].
 
-We propose developing a brand new data structure called Merkle Mountain Belt (MMB), namely both its theoretical and implementation sides, that would replace the use of the Merkle Mountain Range (MMR) in the BEEFY protocol used by bridges like Snowbridge and Hyperbridge. This change will considerably reduce the size of cross-chain message proofs in DOT→ETH bridging[^hyperbridge-operational-cost], in turn reducing the transaction costs for users, with estimated savings of one to two million dollars [per year](#Traffic-Estimate), at current prices.
+We propose developing a brand new data structure called Merkle Mountain Belt (MMB), namely both its theoretical and implementation sides, that would replace the use of the Merkle Mountain Range (MMR) in the BEEFY protocol used by bridges like Snowbridge and Hyperbridge. This change will considerably reduce the size of cross-chain message proofs in DOT→ETH bridging[^hyperbridge-operational-cost], in turn reducing the transaction costs for users, with estimated savings of 1-1.4 million dollars [per year](#Traffic-Estimate), at current prices.
 
 We also propose writing a research paper in collaboration with Alistair Stewart, Head of Research at Web3 Foundation, about the new data structure, and publishing it in a top rated computer science conference. Polkadot has always been a thought leader in blockchain technology, being one of the few communities that pioneers top quality research, and not just bells and whistles. This proposal honors this Polkadot tradition. MMRs are currently widely used across multiple blockchains, and improving upon them with MMBs would heighten Polkadot's impact on and reputation within the wider ecosystem.
 
@@ -42,7 +42,7 @@ The members of our [team](#Team) are highly qualified and have worked in Polkado
 
 :::info
 **TLDR of MMBs & cost analysis:**
-The MMB data structure serves as a plug-in replacement for MMR, to produce BEEFY commitments, which are primarily used by the DOT🡘ETH bridges. Over the next 5 years, MMB would [reduce the average proof size by over 40%](https://docs.google.com/spreadsheets/d/1PRea58H84NpxHeJirpl8KUikfqFLYvVr8l70OFrTxX4) compared to the current MMR implementation. From our gas and cost estimates, this corresponds to $1.25 of savings per transaction.
+The MMB data structure serves as a plug-in replacement for MMR, to produce BEEFY commitments, which are primarily used by the DOT🡘ETH bridges. Over the next 5 years, MMB would [reduce the average proof size by over 40%](https://docs.google.com/spreadsheets/d/1PRea58H84NpxHeJirpl8KUikfqFLYvVr8l70OFrTxX4) compared to the current MMR implementation. From our gas and cost estimates, this corresponds to $1.11 of savings per transaction.
 <!---If Polkadot's BEEFY bridges have comparable volume--->
 :::
 
@@ -142,9 +142,9 @@ To compare both schemes, we consider the membership proof of leaves up until the
 
 Via gas profiling from Snowfork's implementation, every additional hash in the membership proof of an MMR leaf adds approximately 2'568 gas of computation cost on Ethereum: [`Lederstrumpf/snowbridge/rhmb/profile-proof-item-gas-cost`](https://github.com/Snowfork/snowbridge/compare/main...Lederstrumpf:snowbridge:rhmb/profile-proof-item-gas-cost?expand=1#diff-ad43af2a8fe32a0a552c025fc1d86308adf4ee1e4d45f83070cce458c461c818R85-R87)
 
-Assuming a gas price of 26.99 GWEI (365 day SMA via [Glassnode](https://studio.glassnode.com/metrics?a=ETH&category=&chartStyle=column&ema=0&from_exchange=aggregated&m=fees.GasPriceMean&mAvg=365&mMedian=0&resolution=24h&s=1687097402&to_exchange=aggregated&u=1718633402&utm_campaign=woc_02_2023&utm_medium=insights_woc&utm_source=gn_insights&zoom=365)), and an ETH price of $2'452/ETH (365 day SMA via [Glassnode](https://studio.glassnode.com/metrics?a=ETH&category=Market&chartStyle=column&ema=0&from_exchange=aggregated&m=market.PriceUsdClose&mAvg=365&mMedian=0&resolution=24h&s=1687097402&to_exchange=aggregated&u=1718633402&utm_campaign=woc_02_2023&utm_medium=insights_woc&utm_source=gn_insights&zoom=365)), the cost per hash is 17.5 cents.
+Assuming a gas price of 23.87 GWEI (365 day SMA via [Glassnode](https://studio.glassnode.com/metrics?a=ETH&category=&chartStyle=column&ema=0&from_exchange=aggregated&m=fees.GasPriceMean&mAvg=365&mMedian=0&resolution=24h&s=1687097402&to_exchange=aggregated&u=1718633402&utm_campaign=woc_02_2023&utm_medium=insights_woc&utm_source=gn_insights&zoom=365)), and an ETH price of $2'696.79/ETH (365 day SMA via [Glassnode](https://studio.glassnode.com/metrics?a=ETH&category=Market&chartStyle=column&ema=0&from_exchange=aggregated&m=market.PriceUsdClose&mAvg=365&mMedian=0&resolution=24h&s=1687097402&to_exchange=aggregated&u=1718633402&utm_campaign=woc_02_2023&utm_medium=insights_woc&utm_source=gn_insights&zoom=365)), the cost per hash is 16.57 cents.
 
-Consequently, since an average proof size of a leaf in an MMR of depth up to $k\leq150$ is 16.65, the expected proof verification cost for such a leaf is $2.91. In contradistinction, with MMBs the expected proof size is 9.95, hence the cost goes down to $1.74. Using an MMB rather than an MMR for the BEEFY commitment thus would effect a saving of 6.7 hashes, or $1.17 per message sent to Ethereum.
+Consequently, since an average proof size of a leaf in an MMR of depth up to $k\leq150$ is 16.65, the expected proof verification cost for such a leaf is $2.75. In contradistinction, with MMBs the expected proof size is 9.95, hence the cost goes down to $1.65. Using an MMB rather than an MMR for the BEEFY commitment thus would effect a saving of 6.7 hashes, or $1.10 per message sent to Ethereum.
 <!---committed list of size $n=2^{24}$ (current Kusama/Polkadot block counts),--->
 
 For more calculation details and a 1000-day[^glassnode-maximum-range] SMA comparison, see the [Cost Analysis Spreadsheet](https://docs.google.com/spreadsheets/d/1PRea58H84NpxHeJirpl8KUikfqFLYvVr8l70OFrTxX4).
@@ -159,9 +159,9 @@ To estimate the transaction numbers we can expect for a successful DOT🡘ETH br
 <!--- TODO: maybe make the following a footnote to improve flow --->
 Our estimate is thus based on the assumption that at least one DOT🡘ETH bridge bridge is a success. This is the same reason we chose 15 minutes (+ 24 minutes ranDAO [^randao] for Snowbridge) as a reference latency, given that such latency is offered by competitors like Stargate and Optimism, and even lower for trusted bridging setups.
 
-A comparison, using data from 19 June 2024, is available here: [Cost Analysis Spreadsheet](https://docs.google.com/spreadsheets/d/1PRea58H84NpxHeJirpl8KUikfqFLYvVr8l70OFrTxX4). From it, we expect an average of 3'054 transactions per day, or 1'115'000 transactions per year.
+A comparison, using data from 31 August 2024, is available here: [Cost Analysis Spreadsheet](https://docs.google.com/spreadsheets/d/1PRea58H84NpxHeJirpl8KUikfqFLYvVr8l70OFrTxX4). From it, we expect an average of 2'646 transactions per day, or 965'790 transactions per year.
 
-**Result:** *The estimated cost saving from switching from MMRs to MMBs is in the range of $1'306'000/year - $1'977'000/year.*
+**Result:** *The estimated cost saving from switching from MMRs to MMBs is in the range of $1'069'000/year - $1'397'000/year.*
 <!-- *At a subsidization level of ..., this represents an annual cost saving of ... to the Polkadot treasury.* -->
 
 ## How the MMB data structure looks like
