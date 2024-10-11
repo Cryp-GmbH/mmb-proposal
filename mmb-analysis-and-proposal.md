@@ -42,7 +42,7 @@ The members of our [team](#Team) are highly qualified and have worked in Polkado
 
 :::info
 **TLDR of MMBs & cost analysis:**
-The MMB data structure serves as a plug-in replacement for MMR, to produce BEEFY commitments, which are primarily used by the DOT🡘ETH bridges. Over the next 5 years, MMB would [reduce the average proof size by over 40%](https://docs.google.com/spreadsheets/d/1CIANkTytd6qVo_oc_r2EYzdschoACzgyIa5OiMmPy0I/edit?gid=174519946#gid=174519946) compared to the current MMR implementation. From our gas and cost estimates, this corresponds to $1.25 of savings per transaction.
+The MMB data structure serves as a plug-in replacement for MMR, to produce BEEFY commitments, which are primarily used by the DOT🡘ETH bridges. Over the next 5 years, MMB would [reduce the average proof size by over 40%](https://docs.google.com/spreadsheets/d/1PRea58H84NpxHeJirpl8KUikfqFLYvVr8l70OFrTxX4) compared to the current MMR implementation. From our gas and cost estimates, this corresponds to $1.25 of savings per transaction.
 <!---If Polkadot's BEEFY bridges have comparable volume--->
 :::
 
@@ -147,7 +147,7 @@ Assuming a gas price of 26.99 GWEI (365 day SMA via [Glassnode](https://studio.g
 Consequently, since an average proof size of a leaf in an MMR of depth up to $k\leq150$ is 16.65, the expected proof verification cost for such a leaf is $2.91. In contradistinction, with MMBs the expected proof size is 9.95, hence the cost goes down to $1.74. Using an MMB rather than an MMR for the BEEFY commitment thus would effect a saving of 6.7 hashes, or $1.17 per message sent to Ethereum.
 <!---committed list of size $n=2^{24}$ (current Kusama/Polkadot block counts),--->
 
-For more calculation details and a 1000-day[^glassnode-maximum-range] SMA comparison, see the [Cost Analysis Spreadsheet](https://docs.google.com/spreadsheets/d/1CIANkTytd6qVo_oc_r2EYzdschoACzgyIa5OiMmPy0I/edit?gid=174519946#gid=174519946).
+For more calculation details and a 1000-day[^glassnode-maximum-range] SMA comparison, see the [Cost Analysis Spreadsheet](https://docs.google.com/spreadsheets/d/1PRea58H84NpxHeJirpl8KUikfqFLYvVr8l70OFrTxX4).
 
 ***Note:** These costs are saved by bridge users and -- in case of a subsidy -- the Polkadot treasury[^treasury]. In either case, these fees would otherwise just be burned on Ethereum, with no benefit toward the Polkadot ecosystem. This reduction in running costs will make the Polkadot🡘Ethereum bridge more competitive with other bridges, and ensure its short-term adoption and long-term upkeep.*
 
@@ -159,7 +159,7 @@ To estimate the transaction numbers we can expect for a successful DOT🡘ETH br
 <!--- TODO: maybe make the following a footnote to improve flow --->
 Our estimate is thus based on the assumption that at least one DOT🡘ETH bridge bridge is a success. This is the same reason we chose 15 minutes (+ 24 minutes ranDAO [^randao] for Snowbridge) as a reference latency, given that such latency is offered by competitors like Stargate and Optimism, and even lower for trusted bridging setups.
 
-A comparison, using data from 19 June 2024,  is available here: [Cost Analysis Spreadsheet](https://docs.google.com/spreadsheets/d/1CIANkTytd6qVo_oc_r2EYzdschoACzgyIa5OiMmPy0I/edit?gid=174519946#gid=174519946). From it, we expect an average of 3'054 transactions per day, or 1'115'000 transactions per year.
+A comparison, using data from 19 June 2024, is available here: [Cost Analysis Spreadsheet](https://docs.google.com/spreadsheets/d/1PRea58H84NpxHeJirpl8KUikfqFLYvVr8l70OFrTxX4). From it, we expect an average of 3'054 transactions per day, or 1'115'000 transactions per year.
 
 **Result:** *The estimated cost saving from switching from MMRs to MMBs is in the range of $1'306'000/year - $1'977'000/year.*
 <!-- *At a subsidization level of ..., this represents an annual cost saving of ... to the Polkadot treasury.* -->
