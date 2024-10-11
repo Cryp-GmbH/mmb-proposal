@@ -1,4 +1,4 @@
-# Merkle Mountain Belts: Cost saving analysis + funding proposal V2
+# Merkle Mountain Belt: Cost saving analysis + funding proposal V2
 ![Groupe Logo noir@4x](https://hackmd.io/_uploads/Hkdh8Idw0.png =10%x)
 #### Cryp GmbH
 ##### Alfonso Cevallos, Robert Hambrock
