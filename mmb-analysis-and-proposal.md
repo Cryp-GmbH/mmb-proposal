@@ -1,4 +1,4 @@
-# Merkle Mountain Belt: Cost saving analysis + funding proposal V2
+# Merkle Mountain Belt: Cost saving analysis + funding proposal V2[^original-proposal]
 ![Groupe Logo noir@4x](https://hackmd.io/_uploads/Hkdh8Idw0.png =10%x)
 #### Cryp GmbH
 ##### Alfonso Cevallos, Robert Hambrock
@@ -467,3 +467,5 @@ When Hyperbridge's Ethereum client receives inbound cross-chain messages (`handl
 [^success-reward-calculation-method]: At a high-level, for the case of Snowbridge, we can calculate the cost saving as follows: `gasSaving = gasCostPerProofItem * (proofItemsMMR(leafPosition, accumulatorSize) - proofItemsMMB)`, where `proofItemsMMR(leafPosition, accumulatorSize)` can be calculated as in [here](https://github.com/nervosnetwork/merkle-mountain-range/compare/master...Lederstrumpf:merkle-mountain-range:mmr_profile_proof_size), the `accumulatorSize` can be retrieved from [`BeefyClient.latestBeefyBlock`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L156-L157), the leafPosition can be determined from [`MMRLeaf.parentNumber`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L111-L112), and `proofItemsMMB` will just be the length of the MMB [`leafProof`](https://github.com/Snowfork/snowbridge/blob/77b4c04e3663e0fabfb66b0a5c261e271fe9d2ec/contracts/src/BeefyClient.sol#L348) once MMBs are deployed.
 
 [^discussions-on-current-cost]: The current cost of DOT→ETH bridging -- even with the recent decrease to ~6 DOT per transfer -- has been raised in the community as a growth painpoint for growth of Snowbridge usage. See for instance related discussions here: [1](https://polkadot.subsquare.io/referenda/1127), [2](https://x.com/Erwin_Schroedy/status/1831266621614145603), [3](https://x.com/ClaraVanStaden/status/1831426063551066292)
+
+[^original-proposal]: Links: [V1 of proposal](https://hackmd.io/@MerkleMountainBelts/MMB-Funding-Proposal) and [version tracking for changes](https://github.com/Cryp-GmbH/mmb-proposal/compare/original-proposal...main) since [original post](https://polkadot.polkassembly.io/post/2392)
