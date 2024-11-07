@@ -405,7 +405,7 @@ We propose a reward structure with three components, all of which will be trigge
 
 - The remaining 30% of the cost of completion of Milestones 1-6, that was mentioned in the [Cost of Proposal upon Completion](#Cost-of-Proposal-upon-Completion) section, i.e., $639'000\mbox{ CHF} \times 0.3 = 191'700 \mbox{ CHF}$.
 - A fixed fee of $45'000\mbox{ CHF}$, to account for our accrued cost in achieving the three success criteria, and
-- A variable reward consisting of 30% share of the provable cost savings incurred by our implementation of MMB against the cost that would have been incurred by remaining with MMR, to be rewarded over 10 years, starting from the moment all three success criteria are met. 
+- A variable reward consisting of 30% share of the provable cost savings incurred by our implementation of MMB against the cost that would have been incurred by remaining with MMR, to be rewarded over 10 years (subject to our team continuing to maintain[^maintenance-scope] our MMB library), starting from the moment all three success criteria are met. 
 
 We highlight that the third success criterion ensures that these rewards will only be paid once a net positive economic outcome is guaranteed for the community. In the unlikely scenario that the total cost savings never exceed the upfront cost of the proposal, there will be no success rewards. 
 
@@ -469,3 +469,5 @@ When Hyperbridge's Ethereum client receives inbound cross-chain messages (`handl
 [^discussions-on-current-cost]: The current cost of DOT→ETH bridging -- even with the recent decrease to ~6 DOT per transfer -- has been raised in the community as a growth painpoint for growth of Snowbridge usage. See for instance related discussions here: [1](https://polkadot.subsquare.io/referenda/1127), [2](https://x.com/Erwin_Schroedy/status/1831266621614145603), [3](https://x.com/ClaraVanStaden/status/1831426063551066292)
 
 [^original-proposal]: Links: [V1 of proposal](https://hackmd.io/@MerkleMountainBelts/MMB-Funding-Proposal) and [version tracking for changes](https://github.com/Cryp-GmbH/mmb-proposal/compare/original-proposal...main) since [original post](https://polkadot.polkassembly.io/post/2392)
+
+[^maintenance-scope]: Maintenance of the MMB library at least includes:   1. addressing bug reports, 2. addressing security issues of the library - in particular any coordinated vulnerability disclosures, and 3. ensuring the MMB library API remains compatible with Polkadot/JAM
