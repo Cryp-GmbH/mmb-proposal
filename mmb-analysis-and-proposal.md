@@ -84,7 +84,7 @@ Surprisingly, MMB achieves a **constant** cost per append: between 3 and 5 hash 
 
 ### Shorter membership proofs
 
-However, the killer feature of MMB for our use case is its slight unbalancedness, which makes recently appended items have shorter membership proofs. This leads to lower operational costs because bridge users are more likely to care about recent events[^relayer-frequency]. 
+However, the killer feature of MMB for our use case is its slightly unbalanced structure, which makes recently appended items have shorter membership proofs. This leads to lower operational costs because bridge users are more likely to care about recent events[^relayer-frequency]. 
 
 In particular a message, such as a transfer request, will first be created on Polkadot, and then sent to Ethereum, and authenticated there with the help of the BEEFY commitment stored on the bridge. Users typically want to execute this second step as soon as possible, i.e., the next time the BEEFY commitment is updated on the bridge. 
 
@@ -126,11 +126,11 @@ We see that MMB produces shorter proofs in expectation than both MMR and a hash 
 
 ## Cost savings analysis against MMRs
 
-In an Ethereum bridge, a smart contract on Ethereum stores a commitment to Polkadot's state. Currently, this commitment is built with an MMR, where a new leaf is added for each Polkadot relay chain block, and in turn each leaf contains commitments to parachain headers. For Snowbridge, when a message (that, e.g., encodes a transaction) goes over the bridge, either a user or a relayer has to authenticate it in the smart contract, by attaching an MMR proof and a header proof to the message:
+In an Ethereum bridge, a smart contract on Ethereum stores a commitment to Polkadot's state. Currently, this commitment is built with an MMR, where a new leaf is added for each Polkadot relay chain block, and in turn each leaf contains commitments to parachain headers. For Snowbridge, when a message  goes over the bridge, either a user or a relayer has to authenticate it in the smart contract, by attaching an MMR proof and a header proof to the message:
 1. The MMR proof shows that the MMR (whose root is held in smart contract) commits to a leaf, which in turns commits to a particular parachain header.
 2. The header proof shows that this parachain header indeed contains the claimed content, such as a message.
 
-As the number of Polkadot blocks grows, so grow the MMR and the membership proofs that have to be relayed to Ethereum. In contrast, in MMBs the size of a membership proof is *independent* of the size of the structure -- its asymptotic behavior is instead governed by the recency of the corresponding leaf. As bridge users primarily care about recent events, MMB will offer much smaller membership proofs than MMRs on average.
+As the number of Polkadot blocks grows, so do the MMR membership proofs that have to be relayed to Ethereum. In contrast, in MMBs the size of a membership proof is *independent* of the size of the structure -- its asymptotic behavior is instead governed by the recency of the corresponding leaf. As bridge users primarily care about recent events, MMB will offer much smaller membership proofs than MMRs on average.
 
 <a id="Cost-Estimate"></a>
 
