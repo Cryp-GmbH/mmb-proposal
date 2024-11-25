@@ -163,6 +163,8 @@ A comparison, using data from 31 August 2024, is available here: [Cost Analysis 
 
 **Result:** *The estimated cost saving from switching from MMRs to MMBs is in the range of $1'069'000/year - $1'397'000/year.*
 
+**Note:** *On top of these expected savings for a bridge to Ethereum, MMB will also provide gas cost savings to bridges from Polkadot/JAM to Layer-2s such as Arbitrum and Base. A recent back-of-the-envelope analysis of these L2 gas cost savings is available [here](https://hackmd.io/@CrypGmbH/Cost-Saving-L2-Back-of-the-Envelope). Note that since this calculation is still preliminary and will require much deeper investigation to become robust, we opted not to incorporate these additional savings into our estimate above.*
+
 ## What the MMB data structure looks like
 
 ### Unbagged MMB (U-MMB)
