@@ -361,7 +361,7 @@ It will work as follows. Once M1 is delivered, the payment will be of $162'000\m
 
 The remaining 30% of 639'000 CHF will only be paid if and when the project meets all three of the success criteria defined in the [success reward section](#Success-Reward). In particular, one of these criteria requires that the effect of the proposal is economically net-positive for the community. 
 
-*This 30% portion, i.e., $639'000\mbox{ CHF} \times 0.3 = 191'700 \mbox{ CHF}$, will be due in DOT based on the [Swiss National Bank USD/CHF foreign exchange rate](https://www.snb.ch/en/the-snb/mandates-goals/statistics/statistics-pub/current_interest_exchange_rates), and the 30-day EMA of USD/DOT via [Subscan](https://polkadot.subscan.io/tools/price_converter) at the date of submission.*
+*This 30% portion, i.e., $639'000\mbox{ CHF} \times 0.3 = 191'700 \mbox{ CHF}$, will be due in DOT based on the [Swiss National Bank USD/CHF foreign exchange rate](https://www.snb.ch/en/the-snb/mandates-goals/statistics/statistics-pub/current_interest_exchange_rates), and the 7-day EMA of USD/DOT via [Subscan](https://polkadot.subscan.io/tools/price_converter) at the date of submission.*
 
 Notice that the success reward structure contains additional rewards, one fixed and one proportional to our library's incurred savings. Hence, the total cost of the proposal may be greater than 639'000 CHF if the deployment is an economic success, but strictly in proportion to the savings it brings to the community. See the following section for details.
 
