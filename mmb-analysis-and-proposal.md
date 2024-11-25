@@ -277,9 +277,15 @@ https://www.nature.com/articles/s41597-022-01254-0
 We add a buffer of twelve weeks to allocate to further investigations, including fine tuning MMB to different applications. These may end up in the paper too, but this would be subject to, among other factors, the outcome of this research, timing with respect to a suitable conference, and the shape of the paper. If not included in the paper, the findings will nonetheless be made available to the Polkadot community, for instance in the format of research reports.
 
 Here are a few of the areas we will research, ordered by descending priority:
+##### 1. Performance of different Merkle structures for a given sampling distribution
 
-Here are a few of the areas we will research:
-##### XCMP
+Assume you are given a database $X$, and you know that items will be queried from it by users following a specific distribution. What Merkle structure should you use to commit to $X$, to minimize the expected proof size of the queried items? For instance, we can intuitively guess that if the distribution is uniform, we should use a balanced Merkle tree, but if half of all queries are for one item, then we should place this item's leaf as a direct child of the root. 
+
+We would like to make a thorough analysis of this question for commonly observed distributions, such as exponential distributions and zeta distributions. This would be a valuable guide for blockchain protocol designers, so they know exactly what Merkle structure to use for each use case.
+
+In fact, we conjecture that MMB and their variants will be ideal structures for various members of the family of zeta distributions, which are common in real-life scenarios.
+
+##### 2. XCMP
 If, as currently envisioned, XCMP has unordered message delivery, then MMBs are a suitable data structure to use as a drop-in replacement for MMRs. The advantages of MMBs for this use case are: 
 
 - much shorter proofs (and hence smaller operational costs) since, again, queries and authentication will be made mostly for recent messages; and 
@@ -289,24 +295,16 @@ This flavor of MMBs would not be append-only (vis-à-vis for MMRs), but would re
 
 Note that the benefit of shorter proofs for recent items in MMB is doubled in an (on-chain!) update protocol since the co-path for the item has to be traversed twice: once for the membership proof, and then again for the calculation of the new root.
 
-##### Account-based chain analysis
+##### 3. Account-based chain analysis
 The UTXO analysis we will include in the paper substantiates our hypothesis, but extending it to account-based chains is more applicable to the DOT🡘ETH bridge.
 <!--- TODO: extend --->
-
-##### Performance of different Merkle structures for a given sampling distribution 
-
-Assume you are given a database $X$, and you know that items will be queried from it by users following a specific distribution. What Merkle structure should you use to commit to $X$, to minimize the expected proof size of the queried items? For instance, we can intuitively guess that if the distribution is uniform, we should use a balanced Merkle tree, but if half of all queries are for one item, then we should place this item's leaf as a direct child of the root. 
-
-We would like to make a thorough analysis of this question for commonly observed distributions, such as exponential distributions and zeta distributions. This would be a valuable guide for blockchain protocol designers, so they know exactly what Merkle structure to use for each use case.
-
-In fact, we conjecture that MMB and their variants will be ideal structures for various members of the family of zeta distributions, which are common in real-life scenarios.
 
 <!--- TODO: add
 ##### POPOS (TODO)
 https://arxiv.org/pdf/2209.08673.pdf
 --->
 
-##### Flyclient integration
+##### 4. Flyclient integration
 https://eprint.iacr.org/2019/226.pdf
 The light-client protocol Flyclient is a good candidate for MMB integration since its sampling protocol is well aligned with the asymmetric distribution of membership proof sizes of MMBs: to have a probabilistic guarantee of correctess in the construction of a PoW blockchain, Flyclient samples blocks at random, but with a heavy bias towards more recent blocks. Hence, having a commitment scheme that gives recent blocks shorter proofs, may make the Flyclient implementation more efficient. 
 
