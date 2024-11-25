@@ -13,7 +13,7 @@
 2. [Cost saving analysis against MMRs](#MMBs-in-BEEFY)
     a. [Cost savings per transaction](#Cost-Estimate)
     b. [Cost savings in overall bridge traffic](#Traffic-Estimate)
-3. [How the MMB data structure looks like](#How-the-MMB-data-structure-looks-like)
+3. [What the MMB data structure looks like](#What-the-MMB-data-structure-looks-like)
     a. [U-MMB](#Unbagged-MMB-U-MMB)
     b. [F-MMB](#MMB-with-forward-bagging-F-MMB)
     c. [MMB](#MMB-with-double-bagging-MMB)
@@ -162,9 +162,8 @@ Our estimate is thus based on the assumption that at least one DOT🡘ETH bridge
 A comparison, using data from 31 August 2024, is available here: [Cost Analysis Spreadsheet](https://docs.google.com/spreadsheets/d/1PRea58H84NpxHeJirpl8KUikfqFLYvVr8l70OFrTxX4). From it, we expect an average of 2'646 transactions per day, or 965'790 transactions per year.
 
 **Result:** *The estimated cost saving from switching from MMRs to MMBs is in the range of $1'069'000/year - $1'397'000/year.*
-<!-- *At a subsidization level of ..., this represents an annual cost saving of ... to the Polkadot treasury.* -->
 
-## How the MMB data structure looks like
+## What the MMB data structure looks like
 
 ### Unbagged MMB (U-MMB)
 
@@ -236,9 +235,9 @@ F-MMBs are also simpler to implement than MMBs, because they use a simpler baggi
 <a id="Timeframes"></a>
 
 ## Research & Implementation Timeframes
-This funding request forks into a research and an implementation track. The key deliverables are
+This funding request forks into a Research Track and an Implementation Track. The key deliverables are
 1. a research paper,
-2. an analysis of implementation candidates for MMB in addition to BEEFY bridging, and
+2. an analysis of use cases for MMB in addition to BEEFY bridging, and
 3. a Rust implementation of Merkle Mountain Belts integrated into a frame pallet, together with any necessary changes to Snowfork's BEEFY client necessary to accommodate:
 https://github.com/Snowfork/snowbridge/blob/main/contracts/src/BeefyClient.sol
 
@@ -246,7 +245,7 @@ An additional success milestone is described in the [success reward section](#Su
 1. publication of the research paper in a well-respected conference, and
 2. deployment of MMBs in Polkadot's BEEFY protocol.
 
-### Research Timeframe 
+### Research Track 
 ---
 #### M1. Paper: **18 weeks (162'000 CHF)**
 The primary milestone of the research track is completing a paper on MMBs currently in the works. The timeframe for completion of this paper is so short since a lot of the work has already been completed by the team members in collaboration with Alistair Stewart, for which we already received funding from Web3 Foundation, and we are not asking for any of this prior work to be funded again. Alistair Stewart will be a co-author on the paper.
@@ -254,7 +253,7 @@ The primary milestone of the research track is completing a paper on MMBs curren
 The paper will present the novel data structure MMB, as well as its variants U-MMB and F-MMB. We will make a thorough comparison of these structures against (several variants of) MMR and the hash chain, highlighting the pros and cons of each one. In particular, we will focus our analysis on blockchain applications, and how these structures fit in the design of light client protocols. 
 
 
-##### Writing budget: 12 weeks
+##### Writing: 12 weeks
 Completion of paper, including considerable work needed in:
 
 1. An analysis of amortized proof sizes for variants of MMB and MMR, i.e., find the exact constants hidden in big-O notations for long-term performance. 
@@ -274,8 +273,10 @@ This milestone's time budget accounts for anticipated research timeframes such a
 https://www.nature.com/articles/s41597-022-01254-0
 
 ---
-#### M2. Exploration budget: 12 weeks (108'000 CHF)
-We add a buffer of twelve weeks to allocate to further investigations. These may end up in the paper too, but this would be subject to, among other factors, the outcome of this research, timing with respect to a suitable conference, and the shape of the paper. If not included in the paper, the findings will nonetheless be made available to the Polkadot community, for instance in the format of research reports.
+#### M2. Exploration: 12 weeks (108'000 CHF)
+We add a buffer of twelve weeks to allocate to further investigations, including fine tuning MMB to different applications. These may end up in the paper too, but this would be subject to, among other factors, the outcome of this research, timing with respect to a suitable conference, and the shape of the paper. If not included in the paper, the findings will nonetheless be made available to the Polkadot community, for instance in the format of research reports.
+
+Here are a few of the areas we will research, ordered by descending priority:
 
 Here are a few of the areas we will research:
 ##### XCMP
@@ -310,9 +311,9 @@ https://eprint.iacr.org/2019/226.pdf
 The light-client protocol Flyclient is a good candidate for MMB integration since its sampling protocol is well aligned with the asymmetric distribution of membership proof sizes of MMBs: to have a probabilistic guarantee of correctess in the construction of a PoW blockchain, Flyclient samples blocks at random, but with a heavy bias towards more recent blocks. Hence, having a commitment scheme that gives recent blocks shorter proofs, may make the Flyclient implementation more efficient. 
 
 
-#### M3. Finish PoC in Clojure: **6 weeks (54'000 CHF)** 
+#### M3. PoC implementation: **6 weeks (54'000 CHF)** 
 
-It is common for research papers about new algorithms, to include a proof-of-concept implementation, to show there are no hidden obstacles to its applicability. This Clojure implementation will be published as open source, and referenced to in the paper. We highlight that it is already at an advanced stage, and that it will be also an invaluable tool for us as we build the (much more complex) Rust implementation of the library. 
+It is common for research papers about new algorithms, to include a proof-of-concept implementation, to show there are no hidden obstacles to its applicability. We will publish a Clojure implementation as open source, and refer to it in the paper. We highlight that this implementation is already at an advanced stage, hence the short time budget, and that it will be also an invaluable tool for us as we build the (much more complex) Rust implementation of the library. 
 
    1. Implement [increment proofs](#Writing-budget-12-weeks): 3 weeks
    2. Refactor implementation to facilitate specification process: 1 week
@@ -320,12 +321,12 @@ It is common for research papers about new algorithms, to include a proof-of-con
       
 *The Clojure implementation currently exhibits worse asymptotic behavior than we know is theoretically possible. Profiling and performance improvements here are restricted to only cover improvements that will also reflect in the specification and Rust implementation of the library.* 
 
-Each one of these three milestones will be considered delivered when
+Each one of the three milestones in the Research Track will be considered delivered when
 - It has been made publicly available, and 
 - Its content has been greenlit by at least two members of the research team at Web3 Foundation. 
       
 ---
-### Implementation Timeframe
+### Implementation Track
 
 The current implementation of MMBs is available here: 
 <https://github.com/w3f/merkle-mountain-belt-clj>
@@ -344,7 +345,7 @@ We propose developing a Rust library readily integrateable by relevant Rust pall
    2. double-bagged MMBs: 8 weeks
    3. membership & [increment proofs](#Writing-budget-12-weeks) (forward- and double-bagged MMBs): 4 weeks
    
-Each one of these three milestones will be considered delivered when
+Each one of the three milestones in the Implementation Track will be considered delivered when
 - It has been made publicly available, and 
 - Its content has either been greenlit by at least two members of the Polkadot Technical Fellowship of rank II or higher, or been deployed within Polkadot or Kusama (implicit greenlighting). 
 
@@ -470,4 +471,4 @@ When Hyperbridge's Ethereum client receives inbound cross-chain messages (`handl
 
 [^original-proposal]: Links: [V1 of proposal](https://hackmd.io/@MerkleMountainBelts/MMB-Funding-Proposal) and [version tracking for changes](https://github.com/Cryp-GmbH/mmb-proposal/compare/original-proposal...main) since [original post](https://polkadot.polkassembly.io/post/2392)
 
-[^maintenance-scope]: Maintenance of the MMB library at least includes:   1. addressing bug reports, 2. addressing security issues of the library - in particular any coordinated vulnerability disclosures, and 3. ensuring the MMB library API remains compatible with Polkadot/JAM
+[^maintenance-scope]: Maintenance of the MMB library at least includes:   1. addressing bug reports, 2. addressing security issues of the library - in particular any coordinated vulnerability disclosures, and 3. ensuring the MMB library API remains compatible with Polkadot/JAM.
