@@ -414,8 +414,13 @@ If the community prefers, we can also reduce the savings share for a perpetual f
 
 We'd like to explicitly point out that the payout of these success rewards will *not* occur automatically (such as via integration into Snowbridge's smart contracts), but will be subject to approval by the Treasury, where we will submit referenda that include a calculation of the actual cost savings of the MMB library against the prior MMR implementation, provable using on-chain data[^success-reward-calculation-method]. In particular, the variable rewards will require a yearly referendum to be approved. 
 
-## Team
-### Alfonso Cevallos
+## Team 
+
+
+### Alfonso Cevallos 
+
+![Tenerife2](https://hackmd.io/_uploads/HkkcEdMX1g.jpg =25%x)
+
 - Mathematics PhD from EPFL (2016). Postdoc at ETH Zurich, Switzerland (2017-2018).
 - Researcher at Web3 Foundation (2019-2024): 
 focus on scalability, security and incentives of decentralized protocols.
@@ -426,6 +431,10 @@ focus on scalability, security and incentives of decentralized protocols.
 - Content creator and lecturer in several editions of the Polkadot Blockchain Academy. 
 
 ### Robert Hambrock
+
+![image](https://hackmd.io/_uploads/Bk49rOzQ1g.png)
+
+
 - Honours postgrad in Physics from UCT, South Africa (2016, with distinction). Worked primarily on [AdS/CFT correspondence](https://scholar.google.com/citations?user=rluJ3bAAAAAJ&hl=en&oi=ao). Visiting scientist at CERN 2017, 2018.
 - Ethereum CBC Casper: co-author of [Rust implemenation](https://gitlab.com/TrueLevel/casper/core-cbc)
 - switched over to primarily working on Polkadot ecosystem in Q1 2020 (also operate validator [🚂 Zugian Duck 🦆](https://insights.math-crypto.com/polkadot/15jrQX54HczCKJgtYYoKvzJ2kgyCyyA4kyvMv2bC8x9UtDpn/))
