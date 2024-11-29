@@ -443,6 +443,9 @@ focus on scalability, security and incentives of decentralized protocols.
 - MMB PoC implementation in Clojure: [github.com:w3f/merkle-mountain-belt-clj](https://github.com/w3f/merkle-mountain-belt-clj)
 - MMB presentation: [Sub0 2022: BEEFY: How Make Proofs Smol?](https://www.youtube.com/watch?v=uCwXbD9v3ew)
 <!--- - Early work on [Sunny King style PoS](https://github.com/gridcoin-community/Gridcoin-Research) --->
+
+![favicon@4x](https://hackmd.io/_uploads/Bya9lnvmyl.png =15%x)
+
 ### Cryp GmbH
 - R&D consultancy founded 2019 in Biel, Switzerland
 - Specialises on cross-chain protocols
