@@ -392,7 +392,7 @@ This work for this success criterion is deemed complete once MMBs are deployed w
 #### SC3. Economic success: Breakeven of costs for community
 Once the library is deployed within BEEFY, it will immediately start saving users' transaction fees. We consider the MMB library to be an economic success once the accrued fee savings it produces for the community exceed the fixed cost of our proposal. 
 
-This success criterion will therefore be reached once the Polkadot/JAM ecosystem's cost savings of MMB against MMR exceeds 684'000 CHF[^success-reward-calculation-method]. This amount corresponds to the full cost of completing milestones 1 through 6 (639'000 CHF) and the costs linked to completing these three success criteria (45'000 CHF; this latter compensation will be defined later). This threshold ensures that any success rewards paid cannot result in a net financial loss for the community.
+This success criterion will therefore be reached once the Polkadot/JAM ecosystem's cost savings of MMB against MMR exceeds the sum of 639'000 CHF[^success-reward-calculation-method] -- corresponding to the full cost of completing milestones 1 through 6  -- and the to-be-determined audit cost. Notice we internally will cover the cost of achieving success criteria 1 & 2, save for audits. This threshold ensures that any success rewards paid cannot result in a net financial loss for the community.
 
 ### Reward Structure
 
@@ -402,10 +402,9 @@ As we mentioned before, we think that our project has the potential to be very s
 2. It gives us a clear incentive to continue both maintaining and improving the efficiency of the MMB library, without requiring additional treasury funding. As experts in Polkadot bridges and authentication structures, we are confident we can bring further optimizations to the library for years to come, leading to even more cost savings. This aligns our long-term incentives with those of the community.
 3. Usually, there is only a vague sense of how to quantify a project's impact. We are in the unusual position of having a precise and sensible metric (gas cost saving) to measure our proposal's impact.
 
-We propose a reward structure with three components, all of which will be triggered at the moment that all three success criteria are met: 
+We propose a reward structure with two components, both of which will be triggered at the moment that all three success criteria are met:
 
 - The remaining 30% of the cost of completion of Milestones 1-6, that was mentioned in the [Cost of Proposal upon Completion](#Cost-of-Proposal-upon-Completion) section, i.e., $639'000\mbox{ CHF} \times 0.3 = 191'700 \mbox{ CHF}$.
-- A fixed fee of $45'000\mbox{ CHF}$, to account for our accrued cost in achieving the three success criteria, and
 - A variable reward consisting of 30% share of the provable cost savings incurred by our implementation of MMB against the cost that would have been incurred by remaining with MMR, to be rewarded over 10 years (subject to our team continuing to maintain[^maintenance-scope] our MMB library), starting from the moment all three success criteria are met. 
 
 We highlight that the third success criterion ensures that these rewards will only be paid once a net positive economic outcome is guaranteed for the community. In the unlikely scenario that the total cost savings never exceed the upfront cost of the proposal, there will be no success rewards. 
