@@ -405,7 +405,9 @@ As we mentioned before, we think that our project has the potential to be very s
 We propose a reward structure with two components, both of which will be triggered at the moment that all three success criteria are met:
 
 - The remaining 30% of the cost of completion of Milestones 1-6, that was mentioned in the [Cost of Proposal upon Completion](#Cost-of-Proposal-upon-Completion) section, i.e., $639'000\mbox{ CHF} \times 0.3 = 191'700 \mbox{ CHF}$.
-- A variable reward consisting of 30% share of the provable cost savings incurred by our implementation of MMB against the cost that would have been incurred by remaining with MMR, to be rewarded over 10 years (subject to our team continuing to maintain[^maintenance-scope] our MMB library), starting from the moment all three success criteria are met. 
+- A variable reward consisting of 20%-30% share of the provable cost savings incurred by our implementation of MMB against the cost that would have been incurred by remaining with MMR, to be rewarded over 10 years (subject to our team continuing to maintain[^maintenance-scope] our MMB library), starting from the moment all three success criteria are met.
+Specifically, as decided by community vote: 
+Of annual savings below $1.4M (the upper bound of our cost saving estimate), we receive 30% as success reward. Of annual savings above $1.4M, we receive 20% as success reward.
 
 We highlight that the third success criterion ensures that these rewards will only be paid once a net positive economic outcome is guaranteed for the community. In the unlikely scenario that the total cost savings never exceed the upfront cost of the proposal, there will be no success rewards. 
 
